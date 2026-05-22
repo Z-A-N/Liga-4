@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tiket Liga 4 Nasional 2026</title>
+
+  <!-- Font Modern & Tegas -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Montserrat", "sans-serif"],
+            oswald: ["Oswald", "sans-serif"],
+          },
+          colors: {
+            brandRed: "#c93a33",
+            brandRedDark: "#9f2a24",
+            brandDark: "#0a0a0a",
+            brandDarker: "#050505",
+            silverAccent: "#e5e7eb",
+            silverDark: "#9ca3af",
+            sudirmanGreen: "#1b231c",
+          },
+          backgroundImage: {
+            "tactical-pattern": "url(\"data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M20 20.5V18H0v-2h20v-2.5L22.5 16 25 13.5V0h2v13.5L29.5 16l2.5-2.5V20h8v2h-8v2.5L29.5 27 27 29.5V40h-2V29.5L22.5 27 20 29.5V40h-2V29.5L15.5 27 13 29.5V20H0v-2h13l2.5 2.5 2.5-2.5z' fill='%23ffffff' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E\")",
+          },
+        },
+      },
+    };
+  </script>
+  
+  <style>
+    .glass {
+      background: rgba(10, 10, 10, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.05);
+    }
+
+    .glass-card {
+      background: rgba(27, 35, 28, 0.4);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    
+    .marquee-container {
+      display: flex;
+      width: 200%;
+      animation: marquee 30s linear infinite;
+    }
+    
+    .marquee-container:hover {
+      animation-play-state: paused;
+    }
+
+    .text-glow-red {
+      text-shadow: 0 0 25px rgba(201, 58, 51, 0.8);
+    }
+
+    .floodlight {
+      background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+    }
+
+    .cart-pop {
+      box-shadow: 0 -10px 40px rgba(201, 58, 51, 0.3);
+    }
+
+    /* Modal Animation */
+    .modal-enter {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    .modal-enter-active {
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 300ms, transform 300ms;
+    }
+    .modal-exit {
+      opacity: 1;
+      transform: scale(1);
+    }
+    .modal-exit-active {
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 300ms, transform 300ms;
+    }
+
+    /* Custom Scrollbar for Modals */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #050505; 
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #333; 
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #c93a33; 
+    }
+  </style>
+</head>
+<body class="bg-brandDark text-white font-sans antialiased selection:bg-brandRed selection:text-white overflow-x-hidden pb-24 md:pb-28">
+  
+  <!-- Navbar -->
+  <nav class="fixed w-full z-50 glass px-4 md:px-6 py-3 flex justify-between items-center">
+    <div class="flex items-center space-x-2 md:space-x-3 w-auto md:w-1/3">
+      <img src="assets/logo_liga/logo_liga.PNG" onerror="this.src='https://ui-avatars.com/api/?name=L4&background=c93a33&color=fff&bold=true&rounded=true'" alt="Liga 4 Nasional" class="h-10 md:h-14 w-auto object-contain drop-shadow-md" />
+      <div class="text-base sm:text-xl md:text-2xl font-oswald tracking-wide text-silverAccent">
+        LIGA 4<span class="text-brandRed">NASIONAL</span>
+      </div>
+    </div>
+
+    <div class="hidden md:flex justify-center space-x-8 font-bold text-sm tracking-widest uppercase w-auto md:w-1/3">
+      <a href="#jadwal" class="hover:text-brandRed transition duration-300">Matchday</a>
+      <a href="#denah" class="hover:text-brandRed transition duration-300">Denah</a>
+      <a href="#data-pembeli" class="hover:text-brandRed transition duration-300">Tiket</a>
+    </div>
+
+    <div class="flex items-center justify-end w-auto md:w-1/3 relative">
+      <a href="#data-pembeli" class="hidden md:flex bg-gradient-to-r from-brandRed to-brandRedDark text-white px-6 py-2 rounded-sm font-bold hover:shadow-[0_0_15px_rgba(201,58,51,0.6)] transition duration-300 uppercase tracking-wide border border-red-500 items-center">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+        </svg>
+        Beli Tiket
+      </a>
+
+      <button id="mobile-menu-btn" class="md:hidden text-silverAccent hover:text-brandRed focus:outline-none transition duration-300 relative z-50">
+        <svg id="hamburger-icon" class="w-6 h-6 sm:w-7 sm:h-7 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+        <svg id="close-icon" class="w-6 h-6 sm:w-7 sm:h-7 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+
+      <div id="mobile-menu" class="absolute top-12 right-0 w-48 bg-brandDarker/95 backdrop-blur-xl border border-gray-800 rounded-lg shadow-[0_10px_40px_rgba(0,0,0,0.8)] z-[60] hidden flex-col p-4 space-y-3 font-oswald uppercase tracking-widest text-sm transition-opacity duration-300 opacity-0">
+        <a href="#jadwal" class="mobile-link hover:text-brandRed transition block border-b border-gray-800/50 pb-2">Matchday</a>
+        <a href="#denah" class="mobile-link hover:text-brandRed transition block border-b border-gray-800/50 pb-2">Denah</a>
+        <a href="#data-pembeli" class="mobile-link hover:text-brandRed transition block border-b border-gray-800/50 pb-2">Tiket</a>
+        <a href="#data-pembeli" class="mobile-link bg-brandRed text-white px-4 py-2 mt-2 rounded-sm font-bold shadow-[0_0_10px_rgba(201,58,51,0.6)] transition flex items-center justify-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+          </svg>
+          Beli Tiket
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden bg-brandDarker">
+    <!-- FIX VIDEO MOBILE: Ditambahkan webkit-playsinline dan preload="auto" agar support di Safari iOS / Browser Android -->
+    <video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="assets/images/denah-gor.png" class="absolute inset-0 w-full h-full object-cover z-0 opacity-40">
+      <source src="assets/video/gor-goentoer-darjono.mp4" type="video/mp4" />
+      <!-- Fallback format lain jika diperlukan -->
+      <!-- <source src="assets/video/gor-goentoer-darjono.webm" type="video/webm" /> -->
+    </video>
+
+    <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/70 to-brandDark/40 z-0"></div>
+    <div class="absolute inset-0 floodlight z-0"></div>
+    <div class="absolute inset-0 bg-tactical-pattern mix-blend-overlay opacity-40 z-0"></div>
+
+    <div class="relative z-10 w-full max-w-5xl mx-auto mt-24 md:mt-32 flex flex-col justify-between min-h-[70vh]">
+      <div class="space-y-4 md:space-y-6">
+        <div class="flex justify-center items-center space-x-3 mb-2 md:mb-4">
+          <span class="h-[1px] md:h-[2px] w-8 md:w-12 bg-brandRed"></span>
+          <span class="text-silverAccent font-bold tracking-[0.2em] md:tracking-[0.3em] uppercase text-xs md:text-base flex items-center drop-shadow-md">
+            <svg class="w-3 h-3 md:w-4 md:h-4 mr-2 text-brandRed" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd"></path>
+            </svg>
+            Kick-Off Liga 4 Nasional 2026
+          </span>
+          <span class="h-[1px] md:h-[2px] w-8 md:w-12 bg-brandRed"></span>
+        </div>
+
+        <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-oswald text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 leading-tight uppercase transform hover:scale-105 transition duration-700 tracking-wide">
+          LASKAR JENDERAL <br />
+          <span class="text-brandRed text-glow-red bg-none drop-shadow-2xl">SUDIRMAN</span>
+        </h1>
+
+        <p class="text-silverAccent text-sm sm:text-base md:text-xl font-medium tracking-wide max-w-2xl mx-auto italic drop-shadow-lg px-2">
+          "Gemuruhkan GOR Goentoer Darjono. Hijaukan rumput, merahkan tribun!
+          Satu Tiket Terusan, Kawal Kebanggaan Sampai Juara!"
+        </p>
+      </div>
+
+      <div class="flex-grow min-h-[80px] md:min-h-[120px]"></div>
+
+      <div class="pt-8 pb-6 border-t border-white/10 w-full max-w-4xl mx-auto">
+        <h3 class="text-silverDark font-oswald uppercase tracking-[0.2em] text-xs md:text-sm mb-4 md:mb-6">
+          Kick-Off Laga Perdana Dalam:
+        </h3>
+
+        <!-- Area Hitung Mundur -->
+        <div id="countdown" class="flex justify-center gap-2 sm:gap-4 md:gap-6 text-center">
+          <div class="bg-black/40 border border-gray-700/50 rounded-xl p-2 md:p-3 w-16 sm:w-20 md:w-24 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+            <span id="cd-days" class="text-2xl sm:text-3xl md:text-4xl font-black text-brandRed font-oswald block text-glow-red">00</span>
+            <span class="text-[9px] sm:text-[10px] md:text-xs text-gray-400 uppercase tracking-widest mt-1 block">Hari</span>
+          </div>
+          <div class="bg-black/40 border border-gray-700/50 rounded-xl p-2 md:p-3 w-16 sm:w-20 md:w-24 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+            <span id="cd-hours" class="text-2xl sm:text-3xl md:text-4xl font-black text-white font-oswald block">00</span>
+            <span class="text-[9px] sm:text-[10px] md:text-xs text-gray-400 uppercase tracking-widest mt-1 block">Jam</span>
+          </div>
+          <div class="bg-black/40 border border-gray-700/50 rounded-xl p-2 md:p-3 w-16 sm:w-20 md:w-24 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+            <span id="cd-minutes" class="text-2xl sm:text-3xl md:text-4xl font-black text-white font-oswald block">00</span>
+            <span class="text-[9px] sm:text-[10px] md:text-xs text-gray-400 uppercase tracking-widest mt-1 block">Menit</span>
+          </div>
+          <div class="bg-black/40 border border-brandRed/30 rounded-xl p-2 md:p-3 w-16 sm:w-20 md:w-24 backdrop-blur-md shadow-[0_0_15px_rgba(201,58,51,0.2)]">
+            <span id="cd-seconds" class="text-2xl sm:text-3xl md:text-4xl font-black text-brandRed font-oswald block">00</span>
+            <span class="text-[9px] sm:text-[10px] md:text-xs text-brandRed uppercase tracking-widest mt-1 block">Detik</span>
+          </div>
+        </div>
+
+        <div class="mt-8 flex flex-col sm:flex-row justify-center items-center gap-4 w-full px-4 sm:px-0">
+          <a href="#data-pembeli" class="w-full sm:w-auto bg-brandRed text-white border border-brandRed px-8 py-3 md:py-4 font-oswald text-base md:text-xl uppercase tracking-widest hover:bg-brandRedDark transition duration-300 shadow-[0_0_20px_rgba(201,58,51,0.5)] transform hover:-translate-y-1 rounded-sm">
+            Amankan Tribunmu
+          </a>
+          <a href="#jadwal" class="w-full sm:w-auto bg-black/40 backdrop-blur-sm text-silverAccent border border-silverDark px-8 py-3 md:py-4 font-oswald text-base md:text-xl uppercase tracking-widest hover:bg-white hover:text-brandDark transition duration-300 transform hover:-translate-y-1 rounded-sm">
+            Lihat Jadwal
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Section Voucher -->
+  <section id="voucher" class="py-20 px-4 md:px-6 bg-brandDarker relative overflow-hidden">
+    <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brandRed to-transparent"></div>
+    <div class="max-w-6xl mx-auto">
+      <div class="flex flex-col md:flex-row items-center justify-between mb-12 md:mb-16 gap-6">
+        <div class="text-center md:text-left w-full md:w-auto">
+          <h3 class="text-4xl md:text-6xl font-oswald font-black uppercase text-white italic">
+            Matchday <span class="text-brandRed">Rewards</span>
+          </h3>
+          <p class="text-silverDark tracking-[0.2em] uppercase text-xs md:text-sm mt-2">Dapatkan lebih dari sekadar tiket masuk.</p>
+        </div>
+        <div class="hidden md:block border-l-4 border-brandRed pl-6">
+          <p class="text-white font-oswald text-2xl">Simpan Tiket Fisikmu!</p>
+          <p class="text-gray-400">Tunjukkan untuk klaim promo eksklusif.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="flex -space-x-2">
+              <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden z-10 bg-black">
+                <img src="assets/images/owabong.png" alt="Owabong" class="w-full h-full object-contain">
+              </div>
+              <div class="w-12 h-12 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
+                <img src="assets/images/golaga.png" alt="Golaga" class="w-full h-full object-contain">
+              </div>
+            </div>
+            <h4 class="text-white font-oswald text-xl md:text-2xl uppercase leading-tight">Owabong & <br>Golaga</h4>
+          </div>
+          <div class="flex justify-between items-end mb-2">
+            <p class="text-gray-400 text-xs md:text-sm">Potongan harga tiket masuk. <br>Maksimal 4 orang.</p>
+            <span class="text-brandRed font-bold text-2xl md:text-3xl font-oswald">50%</span>
+          </div>
+          <div class="w-full h-px bg-gray-800 my-4 border-dashed border-t"></div>
+          <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
+        </div>
+
+        <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 md:w-14 h-12 md:h-14 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
+              <img src="assets/images/kubangga.png" alt="Kubangga" class="w-full h-full object-contain p-1">
+            </div>
+            <h4 class="text-white font-oswald text-xl md:text-2xl uppercase leading-tight">KUBANGGA</h4>
+          </div>
+          <div class="flex justify-between items-end mb-2">
+            <p class="text-gray-400 text-xs md:text-sm">Potongan untuk Item Jaket <br>atau Third Jersey.</p>
+            <span class="text-brandRed font-bold text-2xl md:text-3xl font-oswald">20K</span>
+          </div>
+          <div class="w-full h-px bg-gray-800 my-4 border-dashed border-t"></div>
+          <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
+        </div>
+
+        <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 md:w-14 h-12 md:h-14 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
+              <img src="assets/images/planetshoes.png" alt="Planet Shoes" class="w-full h-full object-contain p-1">
+            </div>
+            <h4 class="text-white font-oswald text-xl md:text-2xl uppercase leading-tight">PLANET <br>SHOES</h4>
+          </div>
+          <div class="flex justify-between items-end mb-2">
+            <p class="text-gray-400 text-xs md:text-sm">Potongan langsung setiap <br>pembelian sepatu. Seluruh Outlet Planet Shoes</p>
+            <span class="text-brandRed font-bold text-2xl md:text-3xl font-oswald">25K</span>
+          </div>
+          <div class="w-full h-px bg-gray-800 my-4 border-dashed border-t"></div>
+          <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
+        </div>
+
+        <div class="relative bg-brandRed p-6 rounded-lg overflow-hidden group col-span-1 md:col-span-2 lg:col-span-3">
+          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-4 md:gap-6 w-full md:w-auto">
+              <div class="w-16 h-16 md:w-20 md:h-20 bg-black/20 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0">
+                 <img src="assets/images/javacafe.png" alt="Cheesecake" class="w-12 md:w-20 h-12 md:h-20 object-contain">
+              </div>
+              <div>
+                 <span class="text-black font-oswald text-[10px] md:text-xs uppercase bg-white px-2 py-0.5 rounded font-bold tracking-widest">Matchday Special</span>
+                 <h4 class="text-white font-black text-xl sm:text-3xl md:text-4xl mt-1 uppercase italic font-oswald leading-tight">TEBUS MURAH CHEESECAKE</h4>
+                 <p class="text-black font-bold text-sm md:text-lg italic">Cukup tebus 15 Ribu saja!</p>
+              </div>
+            </div>
+            <div class="w-full md:w-auto text-left md:text-right border-t md:border-t-0 md:border-l-2 border-black/20 pt-4 md:pt-0 md:pl-6 flex flex-row md:flex-col justify-between md:justify-center">
+              <div>
+                <p class="text-black text-[10px] font-bold uppercase">Syarat Minimal</p>
+                <p class="text-white font-bold text-xs md:text-sm">Pembelian 30K</p>
+              </div>
+              <div class="text-right">
+                <p class="text-black text-[10px] font-bold uppercase md:mt-2">Periode</p>
+                <p class="text-white font-bold text-xs md:text-sm">Hari H s/d H+1</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- Section Klub Peserta -->
+    <section id="klub-peserta" class="py-16 md:py-20 px-4 md:px-6 bg-brandDarker border-t border-gray-800/50 relative z-10">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-10 md:mb-14">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold uppercase tracking-wide">
+            KLUB <span class="text-brandRed">PESERTA</span>
+          </h3>
+          <p class="text-gray-400 mt-2 text-sm md:text-base tracking-widest font-oswald uppercase">
+            Grup D • Liga 4 Nasional 2026
+          </p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+          <div class="glass-card p-4 sm:p-6 md:p-8 rounded-xl flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(255,255,255,0.05)] border border-gray-800/60 hover:border-gray-500/50 transition-all duration-500 group relative">
+            <div class="absolute inset-0 bg-brandRed/5 opacity-0 group-hover:opacity-100 transition duration-500"></div>
+            <img src="assets/logo_liga/persibangga.png" onerror="this.src='https://ui-avatars.com/api/?name=PBG&background=c93a33&color=fff'" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 object-contain mb-3 md:mb-4 drop-shadow-[0_0_15px_rgba(201,58,51,0.5)] group-hover:scale-110 transition duration-500 relative z-10" />
+            <h4 class="font-oswald text-sm sm:text-base md:text-xl text-gray-500 group-hover:text-white tracking-wide uppercase font-bold transition duration-300 text-center">
+              Persibangga
+            </h4>
+          </div>
+
+          <div class="glass-card p-4 sm:p-6 md:p-8 rounded-xl flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(255,255,255,0.05)] border border-gray-800/60 hover:border-gray-500/50 transition-all duration-500 group relative">
+            <img src="assets/logo_liga/wahana.png" onerror="this.src='https://ui-avatars.com/api/?name=WFC&background=22c55e&color=fff'" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 object-contain mb-3 md:mb-4 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)] scale-105 transition duration-500 relative z-10" />
+            <h4 class="font-oswald text-sm sm:text-base md:text-xl text-gray-500 group-hover:text-white tracking-wide uppercase font-bold transition duration-300 text-center">
+              Wahana FC
+            </h4>
+          </div>
+
+          <div class="glass-card p-4 sm:p-6 md:p-8 rounded-xl flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(255,255,255,0.05)] border border-gray-800/60 hover:border-gray-500/50 transition-all duration-500 group relative">
+            <img src="assets/logo_liga/pspp.png" onerror="this.src='https://ui-avatars.com/api/?name=PSP&background=eab308&color=fff&size=200&bold=true'" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 object-contain mb-3 md:mb-4 scale-105 drop-shadow-[0_0_15px_rgba(234,179,8,0.5)] transition-all duration-500 relative z-10" />
+            <h4 class="font-oswald text-sm sm:text-base md:text-xl text-gray-500 group-hover:text-white tracking-wide uppercase font-bold transition duration-300 text-center">
+              PSPP
+            </h4>
+          </div>
+
+          <div class="glass-card p-4 sm:p-6 md:p-8 rounded-xl flex flex-col items-center justify-center hover:-translate-y-2 hover:shadow-[0_15px_30px_rgba(255,255,255,0.05)] border border-gray-800/60 hover:border-gray-500/50 transition-all duration-500 group relative">
+            <img src="assets/logo_liga/sylvafc.png" onerror="this.src='https://ui-avatars.com/api/?name=SFC&background=3b82f6&color=fff&size=200&bold=true'" class="w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 object-contain mb-3 md:mb-4 scale-105 drop-shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all duration-500 relative z-10" />
+            <h4 class="font-oswald text-sm sm:text-base md:text-xl text-gray-500 group-hover:text-white tracking-wide uppercase font-bold transition duration-300 text-center">
+              Sylva FC
+            </h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Jadwal Pertandingan -->
+    <section id="jadwal" class="py-16 md:py-24 px-4 md:px-6 max-w-5xl mx-auto relative z-10">
+      <div class="text-center mb-12">
+        <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold uppercase tracking-wide">
+          Persibangga <span class="text-brandRed">MATCHDAY</span>
+        </h3>
+        <p class="text-gray-400 mt-3 text-sm md:text-lg flex justify-center items-center">
+          <svg class="w-5 h-5 mr-2 text-brandRed" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          GOR Goentoer Darjono, Purbalingga
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Match 1 -->
+        <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
+          <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Perdana</span>
+          <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Sabtu</h4>
+          <p class="text-brandRed font-bold text-3xl font-oswald">30 Mei 2026</p>
+          <div class="mt-4 pt-4 border-t border-gray-800">
+            <span class="text-silverDark text-sm uppercase tracking-widest">Kick-Off</span>
+            <p class="text-xl font-bold text-white font-oswald">15:15 WIB</p>
+          </div>
+        </div>
+
+        <!-- Match 2 -->
+        <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
+          <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Kedua</span>
+          <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Selasa</h4>
+          <p class="text-brandRed font-bold text-3xl font-oswald">2 Juni 2026</p>
+          <div class="mt-4 pt-4 border-t border-gray-800">
+            <span class="text-silverDark text-sm uppercase tracking-widest">Kick-Off</span>
+            <p class="text-xl font-bold text-white font-oswald">15:15 WIB</p>
+          </div>
+        </div>
+
+        <!-- Match 3 -->
+        <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
+          <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Penutup</span>
+          <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Jumat</h4>
+          <p class="text-brandRed font-bold text-3xl font-oswald">5 Juni 2026</p>
+          <div class="mt-4 pt-4 border-t border-gray-800">
+            <span class="text-silverDark text-sm uppercase tracking-widest">Kick-Off</span>
+            <p class="text-xl font-bold text-white font-oswald">15:15 WIB</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mt-10 text-center">
+        <p class="text-gray-500 italic text-sm">*Jadwal dapat berubah sewaktu-waktu sesuai keputusan PSSI Nasional.</p>
+      </div>
+    </section>
+
+    <!-- Section Cara Pembelian -->
+    <section id="cara-pembelian" class="py-16 md:py-20 px-4 md:px-6 bg-brandDarker border-t border-gray-800/50 relative z-10">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10 md:mb-16">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold uppercase tracking-wide">
+            CARA <span class="text-brandRed">PEMBELIAN</span>
+          </h3>
+          <p class="text-gray-400 mt-2 md:mt-4 text-sm md:text-lg">
+            4 Langkah mudah amankan tiket tribun kebanggaanmu
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 mt-8">
+          <div class="glass-card p-6 md:p-8 rounded-xl relative group hover:-translate-y-2 transition-all duration-300 border border-gray-800/60 hover:border-brandRed/40 flex flex-col items-center text-center mt-4 lg:mt-0">
+            <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 md:w-12 h-10 md:h-12 bg-gradient-to-br from-brandRed to-brandRedDark rounded-full flex items-center justify-center text-white font-oswald font-bold text-lg md:text-xl shadow-[0_0_15px_rgba(201,58,51,0.6)] border-2 border-[#0a0a0a]">
+              1
+            </div>
+            <div class="text-gray-500 group-hover:text-brandRed transition-colors duration-300 mb-4 mt-2 md:mt-4">
+              <svg class="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <h4 class="text-base md:text-xl font-oswald font-bold text-white mb-2 uppercase tracking-wide">Isi Data Diri</h4>
+            <p class="text-gray-400 text-xs md:text-sm leading-relaxed">
+              Lengkapi nama sesuai KTP, email aktif, dan nomor WhatsApp yang terhubung.
+            </p>
+          </div>
+
+          <div class="glass-card p-6 md:p-8 rounded-xl relative group hover:-translate-y-2 transition-all duration-300 border border-gray-800/60 hover:border-brandRed/40 flex flex-col items-center text-center mt-4 lg:mt-0">
+            <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 md:w-12 h-10 md:h-12 bg-gradient-to-br from-brandRed to-brandRedDark rounded-full flex items-center justify-center text-white font-oswald font-bold text-lg md:text-xl shadow-[0_0_15px_rgba(201,58,51,0.6)] border-2 border-[#0a0a0a]">
+              2
+            </div>
+            <div class="text-gray-500 group-hover:text-brandRed transition-colors duration-300 mb-4 mt-2 md:mt-4">
+              <svg class="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path>
+              </svg>
+            </div>
+            <h4 class="text-base md:text-xl font-oswald font-bold text-white mb-2 uppercase tracking-wide">Pilih Tribun</h4>
+            <p class="text-gray-400 text-xs md:text-sm leading-relaxed">
+              Tentukan kategori dan jumlah tiket yang ingin kamu beli (bisa pesan &gt;1 jenis).
+            </p>
+          </div>
+
+          <div class="glass-card p-6 md:p-8 rounded-xl relative group hover:-translate-y-2 transition-all duration-300 border border-gray-800/60 hover:border-brandRed/40 flex flex-col items-center text-center mt-4 lg:mt-0">
+            <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 md:w-12 h-10 md:h-12 bg-gradient-to-br from-brandRed to-brandRedDark rounded-full flex items-center justify-center text-white font-oswald font-bold text-lg md:text-xl shadow-[0_0_15px_rgba(201,58,51,0.6)] border-2 border-[#0a0a0a]">
+              3
+            </div>
+            <div class="text-gray-500 group-hover:text-brandRed transition-colors duration-300 mb-4 mt-2 md:mt-4">
+              <svg class="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+              </svg>
+            </div>
+            <h4 class="text-base md:text-xl font-oswald font-bold text-white mb-2 uppercase tracking-wide">Pembayaran</h4>
+            <p class="text-gray-400 text-xs md:text-sm leading-relaxed">
+              Lakukan pembayaran via QRIS atau Transfer Rekening dengan nominal akurat.
+            </p>
+          </div>
+
+          <div class="glass-card p-6 md:p-8 rounded-xl relative group hover:-translate-y-2 transition-all duration-300 border border-gray-800/60 hover:border-brandRed/40 flex flex-col items-center text-center mt-4 lg:mt-0">
+            <div class="absolute -top-5 left-1/2 -translate-x-1/2 w-10 md:w-12 h-10 md:h-12 bg-gradient-to-br from-brandRed to-brandRedDark rounded-full flex items-center justify-center text-white font-oswald font-bold text-lg md:text-xl shadow-[0_0_15px_rgba(201,58,51,0.6)] border-2 border-[#0a0a0a]">
+              4
+            </div>
+            <div class="text-gray-500 group-hover:text-brandRed transition-colors duration-300 mb-4 mt-2 md:mt-4">
+              <svg class="w-10 h-10 md:w-12 md:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path>
+              </svg>
+            </div>
+            <h4 class="text-base md:text-xl font-oswald font-bold text-white mb-2 uppercase tracking-wide">Tukar E-Tiket</h4>
+            <p class="text-gray-400 text-xs md:text-sm leading-relaxed">
+              E-Tiket dikirim via Email & WA. Tukarkan di <strong>Sekretariat Persibangga</strong> untuk mendapat tiket fisik.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Denah Stadion -->
+    <section id="denah" class="py-16 md:py-24 px-4 md:px-6 bg-brandDark border-t border-gray-800/50">
+      <div class="max-w-7xl mx-auto">
+        <div class="text-center mb-10 md:mb-16">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold uppercase tracking-wide">
+            DENAH <span class="text-brandRed">STADION</span>
+          </h3>
+          <p class="text-gray-400 mt-2 md:mt-4 text-sm md:text-lg">
+            Panduan penempatan tribun & fasilitas GOR Goentoer Darjono
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div class="lg:col-span-7 bg-[#050505] border border-gray-800/60 p-2 sm:p-4 rounded-xl flex justify-center items-center relative group overflow-hidden shadow-2xl">
+            <img src="assets/images/denah-gor.png" onerror="this.src='https://placehold.co/800x600/1b231c/c93a33?text=FOTO+DENAH+STADION&font=oswald'" alt="Denah GOR Goentoer Darjono" class="w-full h-auto object-contain rounded-lg group-hover:scale-[1.02] transition duration-500" />
+          </div>
+
+          <div class="lg:col-span-5 bg-[#0a0a0a] border border-gray-800/60 p-5 md:p-8 rounded-xl shadow-2xl">
+            <h4 class="text-xl md:text-2xl font-oswald text-brandRed mb-5 md:mb-6 border-b border-gray-800 pb-3 uppercase tracking-wider">
+              Keterangan Denah
+            </h4>
+            <div class="grid grid-cols-2 gap-4 mb-8">
+              <div class="flex items-center space-x-2 md:space-x-3">
+                <div class="w-5 h-3 md:w-8 md:h-4 bg-gray-700 rounded-sm shadow-inner shrink-0"></div>
+                <span class="text-gray-300 text-[10px] md:text-sm font-semibold">Pintu Masuk</span>
+              </div>
+              <div class="flex items-center space-x-2 md:space-x-3">
+                <div class="w-4 h-4 md:w-6 md:h-6 bg-red-600 rounded-full flex justify-center items-center text-white text-[9px] md:text-xs font-black shadow-md shadow-red-900/50 shrink-0">X</div>
+                <span class="text-gray-300 text-[10px] md:text-sm font-semibold leading-tight">Dilarang Masuk</span>
+              </div>
+              <div class="flex items-center space-x-2 md:space-x-3">
+                <div class="w-5 h-3 md:w-8 md:h-4 bg-[#00d2ff] rounded-sm shadow-[0_0_8px_rgba(0,210,255,0.4)] shrink-0"></div>
+                <span class="text-gray-300 text-[10px] md:text-sm font-semibold">Tribun VIP</span>
+              </div>
+              <div class="flex items-center space-x-2 md:space-x-3">
+                <div class="w-5 h-4 md:w-8 md:h-5 bg-orange-400 border-b-[3px] md:border-b-4 border-red-800 rounded-sm shadow-md shrink-0"></div>
+                <span class="text-gray-300 text-[10px] md:text-sm font-semibold leading-tight">Loket VIP & UMUM</span>
+              </div>
+            </div>
+
+            <h5 class="text-sm md:text-lg font-oswald text-silverAccent mb-4 border-b border-gray-800 pb-2 uppercase tracking-wide">
+              Lokasi Pintu / Tribun
+            </h5>
+            <div class="grid grid-cols-1 gap-y-2 md:gap-y-3">
+              <div class="flex items-center space-x-3 md:space-x-4 p-2 hover:bg-white/5 rounded-lg transition">
+                <div class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#8b00ff] flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-[0_0_10px_rgba(139,0,255,0.5)] shrink-0">1</div>
+                <span class="text-gray-300 text-xs md:text-sm font-medium">VIP & Umum (Selatan)</span>
+              </div>
+              <div class="flex items-center space-x-3 md:space-x-4 p-2 hover:bg-white/5 rounded-lg transition">
+                <div class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#8b00ff] flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-[0_0_10px_rgba(139,0,255,0.5)] shrink-0">2</div>
+                <span class="text-gray-300 text-xs md:text-sm font-medium">VIP & Umum (Utara)</span>
+              </div>
+              <div class="flex items-center space-x-3 md:space-x-4 p-2 hover:bg-white/5 rounded-lg transition">
+                <div class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#8b00ff] flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-[0_0_10px_rgba(139,0,255,0.5)] shrink-0">3</div>
+                <span class="text-gray-300 text-xs md:text-sm font-medium">Braling Curva Nord</span>
+              </div>
+              <div class="flex items-center space-x-3 md:space-x-4 p-2 hover:bg-white/5 rounded-lg transition">
+                <div class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#8b00ff] flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-[0_0_10px_rgba(139,0,255,0.5)] shrink-0">4</div>
+                <span class="text-gray-300 text-xs md:text-sm font-medium">Braling Mania</span>
+              </div>
+              <div class="flex items-center space-x-3 md:space-x-4 p-2 hover:bg-white/5 rounded-lg transition">
+                <div class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#8b00ff] flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-[0_0_10px_rgba(139,0,255,0.5)] shrink-0">5</div>
+                <span class="text-gray-300 text-xs md:text-sm font-medium">Umum Timur</span>
+              </div>
+              <div class="flex items-center space-x-3 md:space-x-4 p-2 hover:bg-white/5 rounded-lg transition">
+                <div class="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[#8b00ff] flex items-center justify-center text-white font-bold text-[10px] md:text-sm shadow-[0_0_10px_rgba(139,0,255,0.5)] shrink-0">6</div>
+                <span class="text-gray-300 text-xs md:text-sm font-medium">Southern Boys</span>
+              </div>
+            </div>
+
+            <div class="mt-8 pt-5 border-t border-gray-800 text-center">
+              <span class="font-oswald text-lg md:text-2xl italic tracking-widest text-white">
+                #NOTICKET<span class="text-gray-500 font-light">NOGAME</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Data Pembeli -->
+    <section id="data-pembeli" class="pt-16 md:pt-24 px-4 md:px-6 bg-brandDark border-t border-gray-800/80">
+      <div class="max-w-3xl mx-auto">
+        <div class="text-center mb-8 md:mb-10">
+          <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold uppercase">
+            DATA <span class="text-brandRed">PEMBELI</span>
+          </h3>
+          <p class="text-gray-400 mt-2 md:mt-3 text-sm md:text-base">
+            Lengkapi data diri Anda terlebih dahulu sebelum memilih kategori tiket.
+          </p>
+        </div>
+
+        <div class="glass-card rounded-2xl p-5 md:p-8 relative">
+          <div id="form-error-msg" class="hidden mb-6 bg-red-900/40 border border-red-500 text-red-200 px-4 py-3 rounded-lg items-center text-xs md:text-sm transition-all duration-300">
+            <svg class="w-5 h-5 mr-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <span id="error-text">Mohon lengkapi semua data diri (Nama, Email, WhatsApp) sebelum melakukan pembayaran!</span>
+          </div>
+
+          <div class="space-y-5 md:space-y-6">
+            <div>
+              <label for="buyerName" class="block text-xs md:text-sm font-medium uppercase tracking-widest text-gray-400 mb-2 cursor-pointer">Nama Lengkap</label>
+              <input type="text" id="buyerName" autocomplete="name" placeholder="Masukkan nama sesuai KTP" class="w-full h-12 md:h-14 px-4 md:px-5 rounded-xl bg-brandDarker border border-gray-700 text-white placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-brandRed focus:ring-2 focus:ring-brandRed/30 text-sm md:text-base" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6">
+              <div>
+                <label for="buyerEmail" class="block text-xs md:text-sm font-medium uppercase tracking-widest text-gray-400 mb-2 cursor-pointer">Email Aktif</label>
+                <input type="email" id="buyerEmail" autocomplete="email" placeholder="contoh@email.com" class="w-full h-12 md:h-14 px-4 md:px-5 rounded-xl bg-brandDarker border border-gray-700 text-white placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-brandRed focus:ring-2 focus:ring-brandRed/30 text-sm md:text-base" />
+              </div>
+              <div>
+                <label for="buyerWhatsapp" class="block text-xs md:text-sm font-medium uppercase tracking-widest text-gray-400 mb-2 cursor-pointer">Nomor WhatsApp</label>
+                <input type="tel" id="buyerWhatsapp" autocomplete="tel" placeholder="08xxxxxxxxxx" class="w-full h-12 md:h-14 px-4 md:px-5 rounded-xl bg-brandDarker border border-gray-700 text-white placeholder:text-gray-500 outline-none transition-all duration-300 focus:border-brandRed focus:ring-2 focus:ring-brandRed/30 text-sm md:text-base" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section Tiket -->
+    <section id="tiket" class="py-12 md:py-20 px-4 md:px-6 bg-brandDark relative">
+      <div class="max-w-6xl mx-auto">
+        <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold text-center mb-2 md:mb-4 tracking-wide uppercase">
+          PILIH <span class="text-brandRed">KATEGORI TIKET</span>
+        </h3>
+        <p class="text-center text-gray-400 mb-8 md:mb-16 max-w-2xl mx-auto text-xs md:text-base px-2">
+          Pilih tribun kebanggaanmu. Kamu bisa memesan lebih dari satu jenis tiket sekaligus.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
+          
+          <!-- Tribun Gerilya -->
+          <div class="glass-card p-5 md:p-8 rounded-2xl hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(201,58,51,0.15)] transition duration-500 group flex flex-col bg-[#0a0a0a]">
+            <div class="mb-5 md:mb-6 flex-grow">
+              <span class="text-gray-400 font-oswald uppercase tracking-widest text-[10px] md:text-sm block mb-1 md:mb-2">Tribun Reguler Terbuka</span>
+              <h4 class="text-xl md:text-3xl font-oswald text-white uppercase tracking-wide">TRIBUN GERILYA</h4>
+            </div>
+            <ul class="text-gray-300 space-y-2 md:space-y-3 mb-6 md:mb-8 text-[11px] md:text-sm font-medium">
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Khusus 3 Match Persibangga
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Area Suporter Militan
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Tersedia Voucher pada sisi belakang tiket fisik
+              </li>
+            </ul>
+            <div class="mt-auto border-t border-gray-800 pt-5 md:pt-6">
+              <p class="text-2xl md:text-3xl font-oswald text-white mb-3 md:mb-4">
+                Rp 80.000 <span class="text-xs md:text-sm text-gray-500 font-sans tracking-normal">/tiket</span>
+              </p>
+              <button id="btn-pilih-gerilya" onclick="activateTicket('gerilya')" class="w-full border border-gray-500 text-gray-300 hover:bg-brandRed hover:text-white hover:border-brandRed py-2.5 md:py-3 font-oswald uppercase tracking-widest transition duration-300 rounded-lg text-sm md:text-base font-bold">
+                Pilih Tiket
+              </button>
+              <div id="qty-control-gerilya" class="hidden items-center justify-between bg-black/60 border border-gray-700 rounded-lg p-1.5 transition-all duration-300">
+                <button onclick="updateQty('gerilya', -1)" class="w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-md bg-gray-800 hover:bg-brandRed text-white transition active:scale-90 font-bold text-lg md:text-xl">-</button>
+                <span id="qty-gerilya" class="font-oswald text-xl md:text-2xl font-bold w-10 md:w-12 text-center transition-all duration-150">0</span>
+                <button onclick="updateQty('gerilya', 1)" class="w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-md bg-gray-800 hover:bg-brandRed text-white transition active:scale-90 font-bold text-lg md:text-xl">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tribun Panglima -->
+          <div class="bg-gradient-to-b from-[#111] to-brandDarker border-2 border-brandRed/80 p-5 md:p-8 rounded-2xl hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(201,58,51,0.25)] transition duration-500 relative flex flex-col z-10">
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brandRed text-white px-4 md:px-6 py-1 font-oswald uppercase tracking-widest text-[9px] md:text-[10px] font-bold shadow-lg rounded-sm whitespace-nowrap">
+              Paling Dicari
+            </div>
+            <div class="mb-5 md:mb-6 mt-3 md:mt-4 flex-grow">
+              <span class="text-brandRed font-oswald uppercase tracking-widest text-[10px] md:text-sm block mb-1 md:mb-2">Tribun Tertutup VIP</span>
+              <h4 class="text-2xl md:text-4xl font-oswald text-white uppercase tracking-wide">TRIBUN PANGLIMA</h4>
+            </div>
+            <ul class="text-gray-200 space-y-2 md:space-y-3 mb-6 md:mb-8 text-[11px] md:text-sm font-medium">
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Khusus 3 Match Persibangga
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Parfum Persibangga
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Jersey Kubangga
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Tersedia Voucher pada sisi belakang tiket fisik
+              </li>
+            </ul>
+            <div class="mt-auto border-t border-brandRed/30 pt-5 md:pt-6">
+              <p class="text-3xl md:text-4xl font-oswald text-white mb-3 md:mb-4 text-glow-red">
+                Rp 200.000 <span class="text-xs md:text-sm text-gray-400 font-sans tracking-normal text-shadow-none">/tiket</span>
+              </p>
+              <button id="btn-pilih-panglima" onclick="activateTicket('panglima')" class="w-full bg-brandRed text-white hover:bg-brandRedDark py-2.5 md:py-3 font-oswald uppercase tracking-widest font-bold shadow-[0_0_15px_rgba(201,58,51,0.4)] transition duration-300 rounded-lg text-sm md:text-base">
+                Pilih Tiket
+              </button>
+              <div id="qty-control-panglima" class="hidden items-center justify-between bg-black/60 border border-brandRed/50 rounded-lg p-1.5 transition-all duration-300">
+                <button onclick="updateQty('panglima', -1)" class="w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-md bg-brandRed/20 hover:bg-brandRed text-brandRed hover:text-white transition active:scale-90 font-bold text-lg md:text-xl">-</button>
+                <span id="qty-panglima" class="font-oswald text-xl md:text-2xl font-bold w-10 md:w-12 text-center text-brandRed transition-all duration-150">0</span>
+                <button onclick="updateQty('panglima', 1)" class="w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-md bg-brandRed/20 hover:bg-brandRed text-brandRed hover:text-white transition active:scale-90 font-bold text-lg md:text-xl">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tribun Palagan -->
+          <div class="glass-card p-5 md:p-8 rounded-2xl hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(201,58,51,0.15)] transition duration-500 flex flex-col bg-[#0a0a0a]">
+            <div class="mb-5 md:mb-6 flex-grow">
+              <span class="text-gray-400 font-oswald uppercase tracking-widest text-[10px] md:text-sm block mb-1 md:mb-2">Tribun Reguler Terbuka</span>
+              <h4 class="text-xl md:text-3xl font-oswald text-white uppercase tracking-wide">TRIBUN PALAGAN</h4>
+            </div>
+            <ul class="text-gray-300 space-y-2 md:space-y-3 mb-6 md:mb-8 text-[11px] md:text-sm font-medium">
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Khusus 3 Match Persibangga
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Parfum Persibangga
+              </li>
+              <li class="flex items-start">
+                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                Tersedia Voucher pada sisi belakang tiket fisik
+              </li>
+            </ul>
+            <div class="mt-auto border-t border-gray-800 pt-5 md:pt-6">
+              <p class="text-2xl md:text-3xl font-oswald text-white mb-3 md:mb-4">
+                Rp 120.000 <span class="text-xs md:text-sm text-gray-500 font-sans tracking-normal">/tiket</span>
+              </p>
+              <button id="btn-pilih-palagan" onclick="activateTicket('palagan')" class="w-full border border-gray-500 text-gray-300 hover:bg-brandRed hover:text-white hover:border-brandRed py-2.5 md:py-3 font-oswald uppercase tracking-widest transition duration-300 rounded-lg text-sm md:text-base font-bold">
+                Pilih Tiket
+              </button>
+              <div id="qty-control-palagan" class="hidden items-center justify-between bg-black/60 border border-gray-700 rounded-lg p-1.5 transition-all duration-300">
+                <button onclick="updateQty('palagan', -1)" class="w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-md bg-gray-800 hover:bg-brandRed text-white transition active:scale-90 font-bold text-lg md:text-xl">-</button>
+                <span id="qty-palagan" class="font-oswald text-xl md:text-2xl font-bold w-10 md:w-12 text-center transition-all duration-150">0</span>
+                <button onclick="updateQty('palagan', 1)" class="w-8 h-8 md:w-10 md:h-10 flex justify-center items-center rounded-md bg-gray-800 hover:bg-brandRed text-white transition active:scale-90 font-bold text-lg md:text-xl">+</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Floating Checkout Banner -->
+    <div id="checkout-banner" class="fixed bottom-0 left-0 w-full bg-[#0a0a0a]/95 backdrop-blur-xl border-t border-brandRed z-50 transform translate-y-full transition-transform duration-500 ease-in-out cart-pop px-4 md:px-8 py-3 md:py-4">
+      <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div>
+          <p class="text-[9px] md:text-xs text-gray-400 uppercase tracking-widest mb-0.5 md:mb-1">
+            Total Tagihan
+            <span id="checkout-count" class="bg-brandRed text-white px-2 py-0.5 rounded-full ml-1.5 md:ml-2 font-bold text-[9px] md:text-[10px]">0 Tiket</span>
+          </p>
+          <p id="checkout-total" class="text-xl md:text-4xl font-oswald font-bold text-brandRed">
+            Rp 0
+          </p>
+        </div>
+        <button onclick="prosesCheckout()" class="bg-brandRed text-white hover:bg-brandRedDark px-5 md:px-10 py-2.5 md:py-4 font-oswald uppercase tracking-widest font-bold transition duration-300 flex items-center rounded-sm text-xs md:text-lg shadow-[0_0_15px_rgba(201,58,51,0.4)]">
+          Lanjut Bayar
+          <svg class="w-3.5 h-3.5 md:w-5 md:h-5 ml-1.5 md:ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+     <!-- Sponsor Section -->
+    <section id="sponsor" class="py-12 md:py-16 bg-brandDark text-center px-4 md:px-6 border-b border-t border-gray-800">
+      <h3 class="text-xs md:text-sm font-oswald text-gray-500 uppercase tracking-[0.3em] mb-8 md:mb-10">
+        Sponsor & Partner
+      </h3>
+
+      <!-- Container Sponsor (Flex Wrap & Center) -->
+      <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-8 md:gap-x-10 md:gap-y-12 max-w-5xl mx-auto">
+        <!-- TIER 1 (Sponsor Utama) - Ukuran Paling Besar -->
+        <img src="assets/sponsor/sponsor1.png" alt="Sponsor 1" class="h-20 sm:h-24 md:h-28 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300 drop-shadow-md" />
+
+        <!-- TIER 2 (Co-Sponsor) - Ukuran Besar -->
+        <img src="assets/sponsor/sponsor2.png" alt="Sponsor 2" class="h-16 sm:h-20 md:h-24 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+        <img src="assets/sponsor/sponsor3.png" alt="Sponsor 3" class="h-16 sm:h-20 md:h-24 w-auto object-contain grayscale opacity-60 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+
+        <!-- TIER 3 (Sponsor Pendukung) - Ukuran Sedang -->
+        <img src="assets/sponsor/sponsor4.png" alt="Sponsor 4" class="h-12 sm:h-8 md:h-12 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+        <img src="assets/sponsor/sponsor5.png" alt="Sponsor 5" class="h-12 sm:h-14 md:h-16 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+        <img src="assets/sponsor/sponsor6.png" alt="Sponsor 6" class="h-12 sm:h-14 md:h-16 w-auto object-contain grayscale opacity-50 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+
+        <!-- TIER 4 (Partner) - Ukuran Kecil -->
+        <img src="assets/sponsor/sponsor7.png" alt="Sponsor 7" class="h-12 sm:h-14 md:h-14 w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+        <img src="assets/sponsor/sponsor8.png" alt="Sponsor 8" class="h-6 sm:h-8 md:h-8 w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+        <img src="assets/sponsor/sponsor9.png" alt="Sponsor 9" class="h-10 sm:h-12 md:h-12 w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+
+        <!-- TIER 5 (Support Partner) - Ukuran Paling Kecil -->
+        <img src="assets/sponsor/sponsor10.png" alt="Sponsor 10" class="h-8 sm:h-10 md:h-10 w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+        <img src="assets/sponsor/sponsor11.png" alt="Sponsor 11" class="h-8 sm:h-10 md:h-10 w-auto object-contain grayscale opacity-40 hover:grayscale-0 hover:opacity-100 hover:scale-110 transition-all duration-300" />
+      </div>
+    </section>
+
+    <!-- Media Partner Running Text -->
+    <section class="bg-brandRed text-white py-2 md:py-3 overflow-hidden border-t-2 border-brandRedDark">
+      <div class="marquee-container flex items-center space-x-6 md:space-x-12 font-oswald font-medium tracking-widest text-[10px] md:text-sm uppercase">
+        <span>OFFICIAL MEDIA PARTNER :</span>
+        <span>• RADIO BINTANG FM</span>
+        <span>• PURBALINGGA POST</span>
+        <span>• INFO PURBALINGGA</span>
+        <span>• BRALING MEDIA</span>
+        <span>• SUARA BANYUMAS</span>
+        <span>OFFICIAL MEDIA PARTNER :</span>
+        <span>• RADIO BINTANG FM</span>
+        <span>• PURBALINGGA POST</span>
+        <span>• INFO PURBALINGGA</span>
+        <span>• BRALING MEDIA</span>
+        <span>• SUARA BANYUMAS</span>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brandDarker text-gray-400 py-10 md:py-16 px-4 md:px-6">
+      <div class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-8 md:gap-12">
+        <div class="md:col-span-5">
+          <div class="flex items-center space-x-3 mb-4 md:mb-6">
+            <img src="assets/logo_liga/logo_liga.PNG" onerror="this.src='https://ui-avatars.com/api/?name=L4&background=c93a33&color=fff&bold=true&rounded=true'" class="h-8 md:h-12 w-auto grayscale opacity-60 hover:grayscale-0 hover:opacity-100 transition duration-300" />
+          </div>
+          <p class="text-xs md:text-sm leading-relaxed mb-6 font-medium text-gray-500">
+            Platform Pembelian Tiket Resmi untuk ajang Liga 4 Nasional 2026.
+            Mendukung perjuangan tim kebanggaan langsung dari tribun Stadion
+            Goentoer Darjono.
+          </p>
+        </div>
+
+        <div class="md:col-span-3 md:col-start-7">
+          <h4 class="text-sm md:text-lg font-oswald text-gray-200 mb-4 md:mb-6 uppercase tracking-widest">
+            Informasi
+          </h4>
+          <ul class="space-y-2 md:space-y-3 text-xs md:text-sm font-medium">
+            <li>
+              <button onclick="document.getElementById('cara-pembelian').scrollIntoView({behavior: 'smooth'})" class="hover:text-brandRed transition focus:outline-none">
+                Cara Pembelian Tiket
+              </button>
+            </li>
+            <li>
+              <button onclick="openInfoModal('regulasi')" class="hover:text-brandRed transition focus:outline-none">
+                Regulasi Stadion
+              </button>
+            </li>
+            <li>
+              <button onclick="openInfoModal('syarat')" class="hover:text-brandRed transition focus:outline-none">
+                Syarat & Ketentuan
+              </button>
+            </li>
+            <li>
+              <button onclick="openInfoModal('faq')" class="hover:text-brandRed transition focus:outline-none">
+                FAQ (Tanya Jawab)
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-4 lg:col-span-3">
+          <h4 class="text-sm md:text-lg font-oswald text-gray-200 mb-4 md:mb-6 uppercase tracking-widest">
+            Markas Komando
+          </h4>
+          <iframe
+            src="https://maps.google.com/maps?q=Stadion%20Goentoer%20Darjono,%20Purbalingga&t=&z=15&ie=UTF8&iwloc=&output=embed"
+            width="100%"
+            height="100"
+            style="border: 0"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            class="rounded-lg mb-4 opacity-80 hover:opacity-100 transition duration-300 md:h-[120px]"
+          ></iframe>
+          <p class="text-xs md:text-sm mb-4 md:mb-6 leading-relaxed flex items-start font-medium">
+            <svg class="w-3.5 h-3.5 md:w-5 md:h-5 mr-2 text-brandRed mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.243-4.243a8 8 0 1111.314 0z"></path>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+            Stadion Goentoer Darjono<br />Purbalingga, Jawa Tengah
+          </p>
+          <a href="https://wa.me/6282224142936" target="_blank" class="inline-flex items-center text-gray-400 hover:text-white transition duration-300 font-bold group text-xs md:text-sm">
+            <svg class="w-4 h-4 md:w-6 md:h-6 mr-2 md:mr-3 text-[#25D366] group-hover:scale-110 transition duration-300 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z" />
+            </svg>
+            Bantuan CS (0822-2414-2936)
+          </a>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto mt-10 md:mt-16 text-center text-[9px] md:text-xs font-oswald tracking-widest uppercase border-t border-gray-800/80 pt-5 md:pt-8 text-gray-600">
+        &copy; 2026 LIGA 4 NASIONAL. DIBANGUN UNTUK LASKAR JENDERAL SUDIRMAN.
+      </div>
+    </footer>
+
+    <!-- Modal Informasi -->
+    <div id="info-modal" class="fixed inset-0 bg-brandDarker/90 backdrop-blur-sm z-[100] hidden items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+      <div class="absolute inset-0 cursor-pointer" onclick="closeInfoModal()"></div>
+      <div id="info-modal-content" class="bg-[#0a0a0a] border border-gray-800 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto flex flex-col relative transform scale-95 transition-transform duration-300 scrollbar-hide">
+        <div class="flex justify-between items-center p-4 md:p-6 border-b border-gray-800 bg-black/40 rounded-t-xl sticky top-0 z-10 backdrop-blur-md">
+          <h3 id="info-modal-title" class="text-lg md:text-2xl font-oswald text-brandRed uppercase tracking-wide">
+            Judul
+          </h3>
+          <button onclick="closeInfoModal()" class="text-gray-400 hover:text-white transition focus:outline-none bg-transparent">
+            <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+        <div id="info-modal-body" class="p-4 md:p-6 text-gray-300 text-xs md:text-base space-y-3 md:space-y-4 font-sans leading-relaxed">
+        </div>
+      </div>
+    </div>
+
+  <!-- --- MODAL PEMBAYARAN: PILIH METODE --- -->
+  <div id="payment-selection-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+    <div class="absolute inset-0 cursor-pointer" onclick="closePaymentModals()"></div>
+    <div class="bg-brandDarker border border-gray-800 rounded-xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto flex flex-col relative z-10 transition-all transform scale-95 opacity-0" id="payment-selection-content">
+      
+      <div class="p-4 md:p-6 border-b border-gray-800 flex justify-between items-center sticky top-0 bg-brandDarker z-20">
+        <h3 class="text-xl md:text-2xl font-oswald text-white uppercase tracking-wide">Pilih <span class="text-brandRed">Pembayaran</span></h3>
+        <button onclick="closePaymentModals()" class="text-gray-400 hover:text-white transition">
+          <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div class="p-4 md:p-6">
+        <div class="bg-black/50 border border-gray-800 rounded-lg p-4 mb-5 md:mb-6">
+          <p class="text-gray-400 text-[10px] md:text-xs uppercase tracking-widest mb-1">Total Tiket (Belum Kode Unik)</p>
+          <p id="pay-modal-total" class="text-2xl md:text-3xl font-oswald font-bold text-gray-300">Rp 0</p>
+          
+          <div class="mt-3 md:mt-4 pt-3 md:pt-4 border-t border-gray-800 flex flex-col gap-1.5 md:gap-2 text-xs md:text-sm text-gray-300">
+            <div class="flex justify-between"><span>Nama:</span> <span id="pay-modal-name" class="font-bold text-white uppercase text-right w-1/2 truncate"></span></div>
+            <div class="flex justify-between"><span>Total Tiket:</span> <span id="pay-modal-count" class="font-bold text-white"></span></div>
+            
+            <!-- Rincian Kategori Tiket -->
+            <div id="pay-modal-breakdown" class="flex flex-col gap-1 mt-1 border-l-2 border-brandRed pl-2 md:pl-3 bg-gray-900/30 py-2 rounded-r">
+              <!-- Diisi oleh Javascript -->
+            </div>
+          </div>
+        </div>
+
+        <p class="text-gray-400 text-xs md:text-sm mb-3 uppercase tracking-widest font-bold">Metode Tersedia</p>
+        <div class="space-y-3">
+          <!-- Opsi Transfer BPD Jateng -->
+          <label class="relative flex items-center p-3 md:p-4 cursor-pointer rounded-lg border border-gray-700 bg-[#0a0a0a] hover:bg-gray-900 transition-all" id="opt-transfer">
+            <input type="radio" name="payment_method" value="transfer" class="hidden" onchange="selectPaymentMethod('transfer')" />
+            <div class="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-gray-500 mr-3 md:mr-4 flex items-center justify-center method-radio shrink-0">
+              <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-brandRed hidden method-dot"></div>
+            </div>
+            <div class="flex flex-col flex-grow">
+              <span class="text-white font-bold text-sm md:text-lg font-oswald tracking-wide">Transfer Bank BPD Jateng</span>
+              <span class="text-gray-500 text-[10px] md:text-xs">Cek manual oleh admin (Wajib transfer pas)</span>
+            </div>
+          </label>
+
+          <!-- Opsi QRIS BPD Jateng -->
+          <label class="relative flex items-center p-3 md:p-4 cursor-pointer rounded-lg border border-gray-700 bg-[#0a0a0a] hover:bg-gray-900 transition-all" id="opt-qris">
+            <input type="radio" name="payment_method" value="qris" class="hidden" onchange="selectPaymentMethod('qris')" />
+            <div class="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-gray-500 mr-3 md:mr-4 flex items-center justify-center method-radio shrink-0">
+              <div class="w-2.5 h-2.5 md:w-3 md:h-3 rounded-full bg-brandRed hidden method-dot"></div>
+            </div>
+            <div class="flex flex-col flex-grow">
+              <span class="text-white font-bold text-sm md:text-lg font-oswald tracking-wide flex items-center gap-2">
+                QRIS BPD Jateng 
+                <span class="bg-brandRed/20 text-brandRed text-[8px] md:text-[10px] px-1.5 md:px-2 py-0.5 rounded uppercase font-bold">Rekomendasi</span>
+              </span>
+              <span class="text-gray-500 text-[10px] md:text-xs">Scan dengan E-Wallet / M-Banking (QR Statis)</span>
+            </div>
+          </label>
+        </div>
+
+        <button id="btn-pay-now" disabled onclick="processToInstruction()" class="w-full mt-5 md:mt-6 bg-gray-700 text-gray-400 py-3 md:py-3.5 rounded-lg font-oswald uppercase tracking-widest font-bold transition duration-300 text-sm md:text-lg">
+          Pilih Metode Dulu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- MODAL PEMBAYARAN: INSTRUKSI & BARCODE --- -->
+  <div id="payment-instruction-modal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-[100] hidden items-center justify-center p-4">
+    <div class="bg-brandDarker border border-brandRed rounded-xl shadow-[0_0_40px_rgba(201,58,51,0.2)] w-full max-w-md max-h-[90vh] overflow-y-auto flex flex-col relative z-10 transition-all transform scale-95 opacity-0" id="payment-instruction-content">
+      
+      <div class="p-4 md:p-6 text-center border-b border-gray-800 sticky top-0 bg-brandDarker z-20">
+        <h3 class="text-lg md:text-xl font-oswald text-white uppercase tracking-wide mb-1">Instruksi Pembayaran</h3>
+        <p class="text-gray-400 text-xs md:text-sm">Sisa Waktu: <span id="pay-timer" class="text-brandRed font-bold">15:00</span></p>
+      </div>
+
+      <div class="p-4 md:p-6 text-center bg-[#0a0a0a]">
+        
+        <!-- View QRIS -->
+        <div id="view-qris" class="hidden flex-col items-center">
+          <div class="bg-white p-2 md:p-3 rounded-xl inline-block mb-3">
+            <img id="qris-image" src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=Pembayaran+Liga+4+BPD+Jateng" alt="QRIS BPD Jateng" class="w-32 h-32 md:w-40 md:h-40 object-contain" />
+          </div>
+
+          <!-- Tombol Download QRIS -->
+          <button onclick="downloadQRIS()" class="mb-4 flex items-center text-[10px] md:text-xs font-bold bg-gray-800 hover:bg-brandRed border border-gray-600 hover:border-brandRed text-white px-4 py-2 rounded-full transition-all duration-300">
+            <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-1.5 md:mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Simpan QRIS ke Galeri
+          </button>
+          
+          <div class="bg-black border border-brandRed/50 rounded-lg p-3 md:p-4 w-full mb-4 flex justify-between items-center shadow-[0_0_15px_rgba(201,58,51,0.1)]">
+            <div class="text-left">
+              <p class="text-[9px] md:text-[10px] text-brandRed uppercase tracking-widest font-bold mb-1">Nominal Scan (Wajib Pas!)</p>
+              <p class="text-xl md:text-2xl font-oswald font-bold text-white" id="qris-total-amount">Rp 0</p>
+            </div>
+            <button class="bg-brandRed hover:bg-brandRedDark text-white text-[10px] md:text-xs uppercase font-bold px-3 py-1.5 md:px-4 md:py-2 rounded shrink-0" onclick="copyText('qris-total-amount', 'Nominal QRIS')">Salin</button>
+          </div>
+          
+          <div class="w-full text-left bg-gray-900/50 border border-gray-700 p-3 md:p-4 rounded text-[10px] md:text-xs text-gray-300 mb-2">
+            <strong class="text-white block mb-1 md:mb-2 font-oswald tracking-widest uppercase text-xs md:text-sm">Tata Cara Pembayaran QRIS:</strong>
+            <ol class="list-decimal pl-4 space-y-1">
+              <li>Buka aplikasi E-Wallet atau M-Banking Anda.</li>
+              <li>Pilih menu <strong>Scan QR / QRIS</strong>.</li>
+              <li>Scan Barcode QRIS di atas (bisa disimpan ke galeri).</li>
+              <li>Salin dan masukkan <strong class="text-brandRed">Nominal Scan</strong> (Harus sama persis dengan 3 digit terakhir).</li>
+              <li>Selesaikan transaksi dan simpan bukti pembayaran.</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- View Transfer -->
+        <div id="view-transfer" class="hidden flex-col items-center w-full">
+          <img src="https://ui-avatars.com/api/?name=BPD+Jateng&background=050505&color=fff&rounded=true" alt="BPD Jateng" class="w-10 h-10 md:w-12 md:h-12 mb-3" />
+          <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4">Transfer ke Rekening Bank BPD Jateng:</p>
+          
+          <!-- Box Rekening -->
+          <div class="bg-black border border-gray-700 rounded-lg p-3 md:p-4 w-full mb-3 flex justify-between items-center">
+            <div class="text-left w-3/4">
+              <p class="text-[9px] md:text-[10px] text-gray-500 uppercase tracking-widest mb-1">No. Rekening Panitia</p>
+              <p class="text-lg md:text-xl font-bold font-oswald text-white tracking-widest break-all" id="norek-text">138 001 234 5678</p>
+              <p class="text-[9px] md:text-[10px] text-gray-400 mt-1">A/N: PANITIA LIGA 4 NASIONAL</p>
+            </div>
+            <button class="bg-gray-800 hover:bg-gray-700 border border-gray-600 text-white text-[10px] md:text-xs uppercase font-bold px-3 py-1.5 md:px-4 md:py-2 rounded shrink-0 ml-2" onclick="copyText('norek-text', 'Nomor Rekening')">Salin</button>
+          </div>
+
+          <!-- Box Nominal -->
+          <div class="bg-black border border-brandRed/50 rounded-lg p-3 md:p-4 w-full mb-4 flex justify-between items-center shadow-[0_0_15px_rgba(201,58,51,0.1)]">
+            <div class="text-left">
+              <p class="text-[9px] md:text-[10px] text-brandRed uppercase tracking-widest font-bold mb-1">Nominal Transfer (Wajib Pas!)</p>
+              <p class="text-xl md:text-2xl font-oswald font-bold text-white" id="tf-total-amount">Rp 0</p>
+            </div>
+            <button class="bg-brandRed hover:bg-brandRedDark text-white text-[10px] md:text-xs uppercase font-bold px-3 py-1.5 md:px-4 md:py-2 rounded shrink-0" onclick="copyText('tf-total-amount', 'Nominal')">Salin</button>
+          </div>
+
+          <div class="w-full text-left bg-gray-900/50 border border-gray-700 p-3 md:p-4 rounded text-[10px] md:text-xs text-gray-300 mb-2">
+            <strong class="text-white block mb-1 md:mb-2 font-oswald tracking-widest uppercase text-xs md:text-sm">Tata Cara Transfer:</strong>
+            <ol class="list-decimal pl-4 space-y-1">
+              <li>Salin <strong>Nomor Rekening</strong> di atas.</li>
+              <li>Buka aplikasi Mobile Banking / ATM Anda.</li>
+              <li>Pilih menu Transfer antar bank / sesama BPD.</li>
+              <li>Masukkan Nomor Rekening tujuan.</li>
+              <li>Salin dan masukkan <strong class="text-brandRed">Nominal Transfer</strong> (Harus sama persis dengan 3 digit terakhir).</li>
+              <li>Selesaikan transaksi dan simpan bukti transfer.</li>
+            </ol>
+          </div>
+        </div>
+
+        <button onclick="simulateSuccess()" class="w-full mt-5 md:mt-6 bg-green-600 hover:bg-green-700 text-white py-3 md:py-3.5 rounded-lg font-oswald uppercase tracking-widest font-bold transition duration-300 shadow-[0_0_15px_rgba(22,163,74,0.4)] text-sm md:text-base">
+          Cek Status Pembayaran
+        </button>
+        <button onclick="closePaymentModals()" class="w-full mt-3 md:mt-4 text-gray-500 hover:text-gray-300 text-xs md:text-sm transition font-medium">
+          Batalkan Transaksi
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- --- MODAL PEMBAYARAN: SUKSES --- -->
+  <div id="payment-success-modal" class="fixed inset-0 bg-brandDarker/95 backdrop-blur-xl z-[110] hidden items-center justify-center p-4">
+    <div class="text-center flex flex-col items-center max-w-md w-full relative z-10 transition-all transform scale-95 opacity-0 max-h-[90vh] overflow-y-auto" id="payment-success-content">
+      <div class="w-20 h-20 md:w-24 md:h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-5 md:mb-6 shadow-[0_0_40px_rgba(34,197,94,0.4)] animate-bounce mt-4 md:mt-0">
+        <svg class="w-10 h-10 md:w-12 md:h-12 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+      </div>
+      <h2 class="text-3xl md:text-4xl font-oswald text-white uppercase font-black mb-2 tracking-wide text-glow-red" style="text-shadow: 0 0 20px rgba(34,197,94,0.5);">Pesanan Diterima!</h2>
+      <p class="text-gray-400 mb-6 md:mb-8 text-xs md:text-sm leading-relaxed px-2 md:px-0">
+        Terima kasih, <strong id="success-name" class="text-white uppercase">Laskar</strong>!<br>
+        Admin sedang mengecek mutasi pembayaranmu. E-Tiket akan dikirimkan ke Email & WhatsApp maksimal 1x24 Jam kerja.
+      </p>
+      <div class="bg-black/50 border border-gray-800 rounded-xl p-4 md:p-5 w-full mb-6 md:mb-8 text-left">
+        <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-1">ID Transaksi</p>
+        <p class="text-white font-oswald text-base md:text-lg tracking-widest mb-3 md:mb-4" id="success-tx-id">L4N-2026-X89AQ</p>
+        <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-1">Langkah Selanjutnya</p>
+        <p class="text-gray-300 text-[11px] md:text-sm">Jika E-Tiket tidak masuk dalam 24 Jam, hubungi CS kami dengan melampirkan bukti transfer dan ID Transaksi di atas.</p>
+      </div>
+      <button onclick="window.location.reload()" class="bg-white text-black hover:bg-gray-200 py-2.5 md:py-3 px-6 md:px-8 rounded-full font-oswald uppercase tracking-widest font-bold transition duration-300 w-full sm:w-auto text-sm md:text-base mb-4 md:mb-0">
+        Kembali ke Beranda
+      </button>
+    </div>
+  </div>
+
+    <script>
+      // --- COUNTDOWN SCRIPT ---
+      const targetDate = new Date("May 30, 2026 15:15:00").getTime();
+      const countdownInterval = setInterval(function () {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("cd-days").innerText = days.toString().padStart(2, "0");
+        document.getElementById("cd-hours").innerText = hours.toString().padStart(2, "0");
+        document.getElementById("cd-minutes").innerText = minutes.toString().padStart(2, "0");
+        document.getElementById("cd-seconds").innerText = seconds.toString().padStart(2, "0");
+
+        if (distance < 0) {
+          clearInterval(countdownInterval);
+          document.getElementById("countdown").innerHTML =
+            "<div class='text-xl sm:text-3xl md:text-4xl font-oswald text-brandRed font-bold uppercase text-glow-red tracking-widest px-4 py-2 border border-brandRed/30 rounded-lg backdrop-blur-sm bg-black/40'>PERTANDINGAN DIMULAI!</div>";
+        }
+      }, 1000);
+
+      // --- MOBILE MENU SCRIPT ---
+      const mobileMenuBtn = document.getElementById("mobile-menu-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const hamburgerIcon = document.getElementById("hamburger-icon");
+      const closeIcon = document.getElementById("close-icon");
+      const mobileLinks = document.querySelectorAll(".mobile-link");
+
+      function toggleMenu() {
+        if (mobileMenu.classList.contains("hidden")) {
+          mobileMenu.classList.remove("hidden");
+          void mobileMenu.offsetWidth;
+          mobileMenu.classList.remove("opacity-0");
+          hamburgerIcon.classList.add("hidden");
+          hamburgerIcon.classList.remove("block");
+          closeIcon.classList.remove("hidden");
+          closeIcon.classList.add("block");
+        } else {
+          mobileMenu.classList.add("opacity-0");
+          setTimeout(() => {
+            mobileMenu.classList.add("hidden");
+          }, 300);
+          closeIcon.classList.add("hidden");
+          closeIcon.classList.remove("block");
+          hamburgerIcon.classList.remove("hidden");
+          hamburgerIcon.classList.add("block");
+        }
+      }
+      mobileMenuBtn.addEventListener("click", toggleMenu);
+      mobileLinks.forEach((link) => {
+        link.addEventListener("click", toggleMenu);
+      });
+
+      // --- LOGIK KERANJANG TIKET (CART) ---
+      const ticketState = {
+        gerilya: { name: "Tribun Gerilya", price: 80000, qty: 0 },
+        panglima: { name: "Tribun Panglima", price: 200000, qty: 0 },
+        palagan: { name: "Tribun Palagan", price: 120000, qty: 0 },
+      };
+
+      let checkoutTotalAmount = 0;
+      let selectedMethod = null;
+      let timerInterval;
+
+      function activateTicket(type) {
+        document.getElementById(`btn-pilih-${type}`).classList.add("hidden");
+        const qtyControl = document.getElementById(`qty-control-${type}`);
+        qtyControl.classList.remove("hidden");
+        qtyControl.classList.add("flex");
+        updateQty(type, 1);
+      }
+
+      function updateQty(type, change) {
+        const newQty = ticketState[type].qty + change;
+        if (newQty >= 0 && newQty <= 10) {
+          ticketState[type].qty = newQty;
+          if (newQty === 0) {
+            document.getElementById(`btn-pilih-${type}`).classList.remove("hidden");
+            const qtyControl = document.getElementById(`qty-control-${type}`);
+            qtyControl.classList.add("hidden");
+            qtyControl.classList.remove("flex");
+          } else {
+            document.getElementById(`btn-pilih-${type}`).classList.add("hidden");
+            const qtyControl = document.getElementById(`qty-control-${type}`);
+            qtyControl.classList.remove("hidden");
+            qtyControl.classList.add("flex");
+          }
+
+          const qtyElement = document.getElementById(`qty-${type}`);
+          qtyElement.innerText = newQty;
+          qtyElement.classList.add("scale-150", "text-white");
+          setTimeout(() => {
+            qtyElement.classList.remove("scale-150", "text-white");
+          }, 150);
+
+          updateCart();
+        }
+      }
+
+      function updateCart() {
+        let totalQty = 0;
+        let totalPrice = 0;
+
+        for (let key in ticketState) {
+          totalQty += ticketState[key].qty;
+          totalPrice += ticketState[key].qty * ticketState[key].price;
+        }
+
+        checkoutTotalAmount = totalPrice; 
+
+        const banner = document.getElementById("checkout-banner");
+        document.getElementById("checkout-total").innerText = "Rp " + totalPrice.toLocaleString("id-ID");
+        document.getElementById("checkout-count").innerText = totalQty + " Tiket";
+
+        if (totalQty > 0) {
+          banner.classList.remove("translate-y-full");
+        } else {
+          banner.classList.add("translate-y-full");
+        }
+      }
+
+      let uniqueCode = 0;
+      let finalTotalAmount = 0;
+
+      // --- VALIDASI DATA & LANJUT KE METODE PEMBAYARAN ---
+      function prosesCheckout() {
+        const nameInput = document.getElementById("buyerName");
+        const emailInput = document.getElementById("buyerEmail");
+        const waInput = document.getElementById("buyerWhatsapp");
+        const errorMsg = document.getElementById("form-error-msg");
+        const errorTextSpan = document.getElementById("error-text");
+
+        [nameInput, emailInput, waInput].forEach((el) => {
+          el.classList.remove("border-red-500", "ring-1", "ring-red-500");
+          el.classList.add("border-gray-700");
+        });
+
+        let isValid = true;
+        let firstInvalid = null;
+        let errorText = "Mohon lengkapi semua data diri sebelum pembayaran!";
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const waRegex = /^08[0-9]{8,12}$/;
+
+        if (!waRegex.test(waInput.value.trim())) {
+          isValid = false; firstInvalid = waInput;
+          waInput.classList.add("border-red-500", "ring-1", "ring-red-500");
+          errorText = "Nomor WhatsApp tidak valid! (Gunakan format 08...)";
+        }
+        if (!emailRegex.test(emailInput.value.trim())) {
+          isValid = false; firstInvalid = emailInput;
+          emailInput.classList.add("border-red-500", "ring-1", "ring-red-500");
+          errorText = "Format Email tidak valid!";
+        }
+        if (!nameInput.value.trim()) {
+          isValid = false; firstInvalid = nameInput;
+          nameInput.classList.add("border-red-500", "ring-1", "ring-red-500");
+          errorText = "Nama lengkap wajib diisi!";
+        }
+
+        if (!isValid) {
+          errorTextSpan.innerText = errorText;
+          errorMsg.classList.remove("hidden");
+          errorMsg.classList.add("flex");
+          const elementPosition = document.getElementById("data-pembeli").getBoundingClientRect().top;
+          window.scrollBy({ top: elementPosition - 100, behavior: "smooth" });
+          setTimeout(() => { firstInvalid.focus(); }, 600);
+          return;
+        }
+
+        errorMsg.classList.add("hidden");
+        errorMsg.classList.remove("flex");
+        document.getElementById("checkout-banner").classList.add("translate-y-full");
+
+        // Set Data Modal - Header
+        document.getElementById("pay-modal-total").innerText = "Rp " + checkoutTotalAmount.toLocaleString("id-ID");
+        document.getElementById("pay-modal-name").innerText = nameInput.value.trim();
+        
+        let totalQty = 0;
+        let breakdownHTML = "";
+        for (let key in ticketState) {
+          if (ticketState[key].qty > 0) {
+            totalQty += ticketState[key].qty;
+            const subTotal = ticketState[key].qty * ticketState[key].price;
+            breakdownHTML += `
+              <div class="flex justify-between text-[10px] md:text-xs text-gray-400">
+                <span>- ${ticketState[key].name} (x${ticketState[key].qty})</span>
+                <span>Rp ${subTotal.toLocaleString("id-ID")}</span>
+              </div>
+            `;
+          }
+        }
+        document.getElementById("pay-modal-count").innerText = totalQty + " Tiket";
+        document.getElementById("pay-modal-breakdown").innerHTML = breakdownHTML;
+
+        // Reset Pilihan & Generate Kode Unik
+        uniqueCode = Math.floor(Math.random() * 899) + 100; // Generate 100 - 999
+        finalTotalAmount = checkoutTotalAmount + uniqueCode;
+
+        selectedMethod = null;
+        document.querySelectorAll('.method-dot').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.method-radio').forEach(el => el.classList.remove('border-brandRed'));
+        document.querySelectorAll('label').forEach(el => el.classList.remove('border-brandRed', 'bg-gray-900'));
+        document.getElementById('btn-pay-now').disabled = true;
+        document.getElementById('btn-pay-now').innerText = "Pilih Metode Dulu";
+        document.getElementById('btn-pay-now').className = "w-full mt-5 md:mt-6 bg-gray-800 text-gray-500 py-3 md:py-3.5 rounded-lg font-oswald uppercase tracking-widest font-bold transition duration-300 text-sm md:text-lg cursor-not-allowed";
+
+        openModalAnimation('payment-selection-modal', 'payment-selection-content');
+      }
+
+      function selectPaymentMethod(method) {
+        selectedMethod = method;
+        
+        document.querySelectorAll('.method-dot').forEach(el => el.classList.add('hidden'));
+        document.querySelectorAll('.method-radio').forEach(el => {
+          el.classList.remove('border-brandRed');
+          el.classList.add('border-gray-500');
+        });
+        document.getElementById('opt-transfer').classList.remove('border-brandRed', 'bg-gray-900');
+        document.getElementById('opt-qris').classList.remove('border-brandRed', 'bg-gray-900');
+
+        const activeLabel = document.getElementById(`opt-${method}`);
+        activeLabel.classList.add('border-brandRed', 'bg-gray-900');
+        activeLabel.querySelector('.method-radio').classList.remove('border-gray-500');
+        activeLabel.querySelector('.method-radio').classList.add('border-brandRed');
+        activeLabel.querySelector('.method-dot').classList.remove('hidden');
+
+        const btn = document.getElementById('btn-pay-now');
+        btn.disabled = false;
+        btn.innerText = "Lanjut Dapatkan Kode Bayar";
+        btn.className = "w-full mt-5 md:mt-6 bg-brandRed hover:bg-brandRedDark text-white py-3 md:py-3.5 rounded-lg font-oswald uppercase tracking-widest font-bold transition duration-300 shadow-[0_0_15px_rgba(201,58,51,0.4)] text-sm md:text-lg";
+      }
+
+      function processToInstruction() {
+        closeModalAnimation('payment-selection-modal', 'payment-selection-content');
+        
+        document.getElementById('view-qris').classList.add('hidden');
+        document.getElementById('view-transfer').classList.add('hidden');
+
+        const formattedTotal = "Rp " + finalTotalAmount.toLocaleString("id-ID");
+
+        if (selectedMethod === 'qris') {
+          document.getElementById('view-qris').classList.remove('hidden');
+          document.getElementById('view-qris').classList.add('flex');
+          document.getElementById('qris-total-amount').innerText = formattedTotal;
+        } else {
+          document.getElementById('view-transfer').classList.remove('hidden');
+          document.getElementById('view-transfer').classList.add('flex');
+          document.getElementById('tf-total-amount').innerText = formattedTotal;
+        }
+
+        clearInterval(timerInterval);
+        let timeLeft = 15 * 60; // 15 Menit timer
+        const timerDisplay = document.getElementById('pay-timer');
+        
+        timerInterval = setInterval(() => {
+          let m = Math.floor(timeLeft / 60);
+          let s = timeLeft % 60;
+          timerDisplay.innerText = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          if (timeLeft <= 0) {
+            clearInterval(timerInterval);
+            alert("Waktu pembayaran habis! Silakan checkout ulang.");
+            closePaymentModals();
+          }
+          timeLeft--;
+        }, 1000);
+
+        setTimeout(() => {
+          openModalAnimation('payment-instruction-modal', 'payment-instruction-content');
+        }, 300);
+      }
+
+      // Fitur untuk Salin Rekening & Salin Nominal
+      function copyText(elementId, type) {
+        let textToCopy = document.getElementById(elementId).innerText;
+        
+        if (type.includes("Nominal")) {
+          textToCopy = textToCopy.replace(/Rp|\./g, '').trim();
+        } else {
+          textToCopy = textToCopy.replace(/\s/g, '').trim();
+        }
+
+        navigator.clipboard.writeText(textToCopy).then(() => {
+          alert(`${type} berhasil disalin: ${textToCopy}`);
+        }).catch(err => {
+          alert(`Gagal menyalin ${type}. Silakan salin manual.`);
+        });
+      }
+
+      // Fitur Download Gambar QRIS
+      function downloadQRIS() {
+        const imgUrl = document.getElementById('qris-image').src;
+        
+        fetch(imgUrl)
+          .then(response => response.blob())
+          .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'QRIS-Pembayaran-Liga4.png';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          })
+          .catch(err => {
+            console.error('Error downloading QRIS:', err);
+            alert('Gagal mengunduh QRIS. Silakan screenshot layar ini secara manual.');
+          });
+      }
+
+      // Fungsi submit ke Backend
+      async function simulateSuccess() {
+        clearInterval(timerInterval);
+
+        const nameInput = document.getElementById("buyerName");
+        const emailInput = document.getElementById("buyerEmail");
+        const waInput = document.getElementById("buyerWhatsapp");
+        
+        const txId = "L4N-" + new Date().getFullYear() + "-" + Math.random().toString(36).substr(2, 5).toUpperCase();
+
+        const dataToSend = {
+          txId: txId,
+          buyerName: nameInput.value.trim(),
+          buyerEmail: emailInput.value.trim(),
+          buyerWhatsapp: waInput.value.trim(),
+          paymentMethod: selectedMethod,
+          totalPaid: finalTotalAmount, 
+          uniqueCode: uniqueCode,
+          orders: []
+        };
+
+        for (let key in ticketState) {
+          if (ticketState[key].qty > 0) {
+            dataToSend.orders.push({
+              name: ticketState[key].name,
+              qty: ticketState[key].qty,
+              price: ticketState[key].price
+            });
+          }
+        }
+
+        try {
+          console.log("Kirim ke server:", dataToSend);
+          const response = await fetch('http://localhost:3000/api/checkout', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dataToSend)
+          });
+
+          const result = await response.json();
+
+          if (!response.ok) {
+            alert("Sistem sibuk / Server Error: " + result.message);
+            return;
+          }
+        } catch (error) {
+          alert("Gagal terhubung ke server (Backend mati). Coba lagi nanti.");
+          console.error(error);
+          return;
+        }
+
+        closeModalAnimation('payment-instruction-modal', 'payment-instruction-content');
+        
+        document.getElementById("success-name").innerText = nameInput.value.trim() || "Sobat";
+        document.getElementById("success-tx-id").innerText = txId;
+
+        setTimeout(() => {
+          openModalAnimation('payment-success-modal', 'payment-success-content');
+        }, 300);
+      }
+
+      function closePaymentModals() {
+        clearInterval(timerInterval);
+        closeModalAnimation('payment-selection-modal', 'payment-selection-content');
+        closeModalAnimation('payment-instruction-modal', 'payment-instruction-content');
+        
+        let totalQty = 0;
+        for (let key in ticketState) totalQty += ticketState[key].qty;
+        if (totalQty > 0) {
+          document.getElementById("checkout-banner").classList.remove("translate-y-full");
+        }
+      }
+
+      function openModalAnimation(modalId, contentId) {
+        const modal = document.getElementById(modalId);
+        const content = document.getElementById(contentId);
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        void modal.offsetWidth;
+        content.classList.remove('opacity-0', 'scale-95');
+        content.classList.add('opacity-100', 'scale-100');
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeModalAnimation(modalId, contentId) {
+        const modal = document.getElementById(modalId);
+        const content = document.getElementById(contentId);
+        content.classList.remove('opacity-100', 'scale-100');
+        content.classList.add('opacity-0', 'scale-95');
+        setTimeout(() => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          document.body.style.overflow = "auto";
+        }, 300);
+      }
+
+      // --- MODAL INFORMASI SCRIPT ---
+      const infoData = {
+        regulasi: {
+          title: "Regulasi Stadion",
+          content: `
+            <ul class="list-disc pl-5 space-y-3">
+              <li>Setiap penonton wajib membawa identitas asli (KTP/KIA) yang sesuai dengan E-Tiket.</li>
+              <li>Dilarang keras membawa senjata tajam, flare, bom asap, kembang api, dan laser.</li>
+              <li>Dilarang membawa minuman keras dan botol minum dari luar (bawa botol kosong/tumbler).</li>
+              <li>Segala bentuk tindakan rasisme dan provokasi tidak akan ditolerir.</li>
+            </ul>`,
+        },
+        syarat: {
+          title: "Syarat & Ketentuan",
+          content: `
+            <ul class="list-disc pl-5 space-y-3">
+              <li>Satu (1) E-Tiket terusan hanya berlaku untuk 1 orang untuk seluruh laga kandang fase grup.</li>
+              <li>Tiket bersifat <strong>Non-Refundable</strong> (tidak dapat dibatalkan atau diuangkan kembali).</li>
+              <li>Panitia tidak bertanggung jawab atas kerugian jika tiket dibeli melalui calo.</li>
+            </ul>`,
+        },
+        faq: {
+          title: "FAQ (Tanya Jawab)",
+          content: `
+            <div class="space-y-4">
+              <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                <strong class="text-white block mb-1">Q: Apakah anak-anak harus membeli tiket?</strong>
+                <p class="text-gray-400">A: Ya, anak berusia di atas 3 tahun wajib memiliki tiket penuh.</p>
+              </div>
+              <div class="bg-gray-900/50 p-4 rounded-lg border border-gray-800">
+                <strong class="text-white block mb-1">Q: Jam berapa gerbang dibuka?</strong>
+                <p class="text-gray-400">A: Seluruh gerbang dibuka 2 jam sebelum Kick-Off dimulai.</p>
+              </div>
+            </div>`,
+        },
+      };
+
+      function openInfoModal(key) {
+        const modal = document.getElementById("info-modal");
+        const contentBox = document.getElementById("info-modal-content");
+        if (infoData[key]) {
+          document.getElementById("info-modal-title").innerHTML = infoData[key].title;
+          document.getElementById("info-modal-body").innerHTML = infoData[key].content;
+        }
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        void modal.offsetWidth;
+        modal.classList.remove("opacity-0");
+        contentBox.classList.remove("scale-95");
+        contentBox.classList.add("scale-100");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeInfoModal() {
+        const modal = document.getElementById("info-modal");
+        const contentBox = document.getElementById("info-modal-content");
+        modal.classList.add("opacity-0");
+        contentBox.classList.remove("scale-100");
+        contentBox.classList.add("scale-95");
+        setTimeout(() => {
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+          document.body.style.overflow = "auto";
+        }, 300);
+      }
+    </script>
+</body>
+</html>
