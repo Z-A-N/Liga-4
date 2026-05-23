@@ -252,10 +252,7 @@
           <p class="text-gray-400">Tunjukkan untuk klaim promo eksklusif.</p>
         </div>
       </div>
-
-      <!-- Di sini aku ubah grid menjadi lg:grid-cols-4 biar 4 card sejajar, atau bisa ganti lg:grid-cols-2 kalau mau dibikin 2 atas 2 bawah -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
         <!-- Card 1: Owabong & Golaga -->
         <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
           <div class="flex items-center gap-3 mb-4">
@@ -309,7 +306,7 @@
           <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
         </div>
 
-        <!-- Card 4: Java Cafe (Sudah disamakan) -->
+        <!-- Card 4: Java Cafe -->
         <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
           <div class="flex items-center gap-4 mb-4">
             <div class="w-12 md:w-14 h-12 md:h-14 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
@@ -921,7 +918,6 @@
             
             <!-- Rincian Kategori Tiket -->
             <div id="pay-modal-breakdown" class="flex flex-col gap-1 mt-1 border-l-2 border-brandRed pl-2 md:pl-3 bg-gray-900/30 py-2 rounded-r">
-              <!-- Diisi oleh Javascript -->
             </div>
           </div>
         </div>
@@ -936,7 +932,7 @@
             </div>
             <div class="flex flex-col flex-grow">
               <span class="text-white font-bold text-sm md:text-lg font-oswald tracking-wide">Transfer Bank BPD Jateng</span>
-              <span class="text-gray-500 text-[10px] md:text-xs">Verifikasi manual via mutasi rekening</span>
+              <span class="text-gray-500 text-[10px] md:text-xs">Pembayaran dikonfirmasi setelah dana diterima</span>
             </div>
           </label>
 
@@ -997,7 +993,7 @@
             <strong class="text-white block mb-1 md:mb-2 font-oswald tracking-widest uppercase text-xs md:text-sm">Panduan Pembayaran:</strong>
             <ol class="list-decimal pl-4 space-y-1">
               <li>Scan kode QRIS di atas menggunakan aplikasi E-Wallet / Mobile Banking.</li>
-              <li>Pastikan nominal yang diinput <strong class="text-white">sama persis</strong> dengan Total Pembayaran di atas (termasuk 3 digit terakhir).</li>
+              <li>Pastikan nominal yang diinput <strong class="text-white">seuai total pembayaran</strong> dengan Total Pembayaran di atas (termasuk 3 digit terakhir).</li>
               <li>Simpan bukti pembayaran Anda.</li>
             </ol>
           </div>
@@ -1005,7 +1001,11 @@
 
         <!-- View Transfer -->
         <div id="view-transfer" class="hidden flex-col items-center w-full">
-          <img src="https://ui-avatars.com/api/?name=BPD+Jateng&background=050505&color=fff&rounded=true" alt="BPD Jateng" class="w-10 h-10 md:w-12 md:h-12 mb-3" />
+          <img
+      src="assets/images/logo_bank.png"
+      alt="BPD Jateng"
+      class="max-w-full max-h-full object-contain"
+    />
           <p class="text-gray-400 text-xs md:text-sm mb-3 md:mb-4">Transfer ke Rekening Bank BPD Jateng:</p>
           
           <div class="bg-black border border-gray-700 rounded-lg p-3 md:p-4 w-full mb-3 flex justify-between items-center">
@@ -1029,7 +1029,7 @@
             <strong class="text-white block mb-1 md:mb-2 font-oswald tracking-widest uppercase text-xs md:text-sm">Panduan Pembayaran:</strong>
             <ol class="list-decimal pl-4 space-y-1">
               <li>Lakukan transfer ke rekening tujuan di atas.</li>
-              <li>Pastikan nominal transfer <strong class="text-white">sama persis</strong> dengan Total Pembayaran (termasuk 3 digit terakhir untuk identifikasi).</li>
+              <li>Pastikan nominal transfer <strong class="text-white">sesuai total pembayaran</strong> dengan Total Pembayaran (termasuk 3 digit terakhir untuk identifikasi).</li>
               <li>Simpan bukti transfer Anda.</li>
             </ol>
           </div>
