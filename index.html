@@ -165,11 +165,8 @@
 
   <!-- Hero Section -->
   <section class="relative min-h-screen flex flex-col justify-center items-center text-center px-4 overflow-hidden bg-brandDarker">
-    <!-- FIX VIDEO MOBILE: Ditambahkan webkit-playsinline dan preload="auto" agar support di Safari iOS / Browser Android -->
     <video autoplay loop muted playsinline webkit-playsinline preload="auto" poster="assets/images/denah-gor.png" class="absolute inset-0 w-full h-full object-cover z-0 opacity-40">
       <source src="assets/video/gor-goentoer-darjono.mp4" type="video/mp4" />
-      <!-- Fallback format lain jika diperlukan -->
-      <!-- <source src="assets/video/gor-goentoer-darjono.webm" type="video/webm" /> -->
     </video>
 
     <div class="absolute inset-0 bg-gradient-to-t from-brandDark via-brandDark/70 to-brandDark/40 z-0"></div>
@@ -239,7 +236,7 @@
     </div>
   </section>
   
-  <!-- Section Voucher -->
+<!-- Section Voucher -->
   <section id="voucher" class="py-20 px-4 md:px-6 bg-brandDarker relative overflow-hidden">
     <div class="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brandRed to-transparent"></div>
     <div class="max-w-6xl mx-auto">
@@ -256,7 +253,10 @@
         </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Di sini aku ubah grid menjadi lg:grid-cols-4 biar 4 card sejajar, atau bisa ganti lg:grid-cols-2 kalau mau dibikin 2 atas 2 bawah -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <!-- Card 1: Owabong & Golaga -->
         <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
           <div class="flex items-center gap-3 mb-4">
             <div class="flex -space-x-2">
@@ -277,6 +277,7 @@
           <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
         </div>
 
+        <!-- Card 2: Kubangga -->
         <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
           <div class="flex items-center gap-4 mb-4">
             <div class="w-12 md:w-14 h-12 md:h-14 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
@@ -292,6 +293,7 @@
           <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
         </div>
 
+        <!-- Card 3: Planet Shoes -->
         <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
           <div class="flex items-center gap-4 mb-4">
             <div class="w-12 md:w-14 h-12 md:h-14 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
@@ -300,37 +302,30 @@
             <h4 class="text-white font-oswald text-xl md:text-2xl uppercase leading-tight">PLANET <br>SHOES</h4>
           </div>
           <div class="flex justify-between items-end mb-2">
-            <p class="text-gray-400 text-xs md:text-sm">Potongan langsung setiap <br>pembelian sepatu. Seluruh Outlet Planet Shoes</p>
+            <p class="text-gray-400 text-xs md:text-sm">Potongan langsung setiap <br>pembelian sepatu.</p>
             <span class="text-brandRed font-bold text-2xl md:text-3xl font-oswald">25K</span>
           </div>
           <div class="w-full h-px bg-gray-800 my-4 border-dashed border-t"></div>
           <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku s/d 30 Juni 2026</p>
         </div>
 
-        <div class="relative bg-brandRed p-6 rounded-lg overflow-hidden group col-span-1 md:col-span-2 lg:col-span-3">
-          <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            <div class="flex items-center gap-4 md:gap-6 w-full md:w-auto">
-              <div class="w-16 h-16 md:w-20 md:h-20 bg-black/20 rounded-full border-2 border-white/10 flex items-center justify-center shrink-0">
-                 <img src="assets/images/javacafe.png" alt="Cheesecake" class="w-12 md:w-20 h-12 md:h-20 object-contain">
-              </div>
-              <div>
-                 <span class="text-black font-oswald text-[10px] md:text-xs uppercase bg-white px-2 py-0.5 rounded font-bold tracking-widest">Matchday Special</span>
-                 <h4 class="text-white font-black text-xl sm:text-3xl md:text-4xl mt-1 uppercase italic font-oswald leading-tight">TEBUS MURAH CHEESECAKE</h4>
-                 <p class="text-black font-bold text-sm md:text-lg italic">Cukup tebus 15 Ribu saja!</p>
-              </div>
+        <!-- Card 4: Java Cafe (Sudah disamakan) -->
+        <div class="relative bg-[#0d0d0d] border border-gray-800 p-6 rounded-lg hover:border-brandRed transition-all">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-12 md:w-14 h-12 md:h-14 rounded-full border border-gray-700 flex items-center justify-center overflow-hidden bg-black">
+              <!-- Pastikan path gambarnya sudah benar ya -->
+              <img src="assets/images/javacafe.png" alt="Java Cafe" class="w-full h-full object-contain p-1">
             </div>
-            <div class="w-full md:w-auto text-left md:text-right border-t md:border-t-0 md:border-l-2 border-black/20 pt-4 md:pt-0 md:pl-6 flex flex-row md:flex-col justify-between md:justify-center">
-              <div>
-                <p class="text-black text-[10px] font-bold uppercase">Syarat Minimal</p>
-                <p class="text-white font-bold text-xs md:text-sm">Pembelian 30K</p>
-              </div>
-              <div class="text-right">
-                <p class="text-black text-[10px] font-bold uppercase md:mt-2">Periode</p>
-                <p class="text-white font-bold text-xs md:text-sm">Hari H s/d H+1</p>
-              </div>
-            </div>
+            <h4 class="text-white font-oswald text-xl md:text-2xl uppercase leading-tight">JAVA <br>CAFE</h4>
           </div>
+          <div class="flex justify-between items-end mb-2">
+            <p class="text-gray-400 text-xs md:text-sm">Tebus murah Cheesecake <br>min. pembelian 30K.</p>
+            <span class="text-brandRed font-bold text-2xl md:text-3xl font-oswald">15K</span>
+          </div>
+          <div class="w-full h-px bg-gray-800 my-4 border-dashed border-t"></div>
+          <p class="text-brandRed text-[10px] font-bold uppercase tracking-widest">Berlaku Hari H s/d H+1</p>
         </div>
+
       </div>
     </div>
   </section>
@@ -384,7 +379,7 @@
     <section id="jadwal" class="py-16 md:py-24 px-4 md:px-6 max-w-5xl mx-auto relative z-10">
       <div class="text-center mb-12">
         <h3 class="text-3xl sm:text-4xl md:text-5xl font-oswald font-bold uppercase tracking-wide">
-          Persibangga <span class="text-brandRed">MATCHDAY</span>
+          MATCH<span class="text-brandRed">DAY</span>
         </h3>
         <p class="text-gray-400 mt-3 text-sm md:text-lg flex justify-center items-center">
           <svg class="w-5 h-5 mr-2 text-brandRed" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -396,37 +391,25 @@
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Match 1 -->
-        <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
-          <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Perdana</span>
-          <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Sabtu</h4>
-          <p class="text-brandRed font-bold text-3xl font-oswald">30 Mei 2026</p>
-          <div class="mt-4 pt-4 border-t border-gray-800">
-            <span class="text-silverDark text-sm uppercase tracking-widest">Kick-Off</span>
-            <p class="text-xl font-bold text-white font-oswald">15:15 WIB</p>
-          </div>
-        </div>
+      <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
+        <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Perdana</span>
+        <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Sabtu</h4>
+        <p class="text-brandRed font-bold text-3xl font-oswald">30 Mei 2026</p>
+      </div>
 
-        <!-- Match 2 -->
-        <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
-          <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Kedua</span>
-          <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Selasa</h4>
-          <p class="text-brandRed font-bold text-3xl font-oswald">2 Juni 2026</p>
-          <div class="mt-4 pt-4 border-t border-gray-800">
-            <span class="text-silverDark text-sm uppercase tracking-widest">Kick-Off</span>
-            <p class="text-xl font-bold text-white font-oswald">15:15 WIB</p>
-          </div>
-        </div>
+      <!-- Match 2 -->
+      <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
+        <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Kedua</span>
+        <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Selasa</h4>
+        <p class="text-brandRed font-bold text-3xl font-oswald">2 Juni 2026</p>
+      </div>
 
-        <!-- Match 3 -->
-        <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
-          <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Penutup</span>
-          <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Jumat</h4>
-          <p class="text-brandRed font-bold text-3xl font-oswald">5 Juni 2026</p>
-          <div class="mt-4 pt-4 border-t border-gray-800">
-            <span class="text-silverDark text-sm uppercase tracking-widest">Kick-Off</span>
-            <p class="text-xl font-bold text-white font-oswald">15:15 WIB</p>
-          </div>
-        </div>
+      <!-- Match 3 -->
+      <div class="glass-card p-6 rounded-xl border border-gray-800 hover:border-brandRed transition-all duration-300 text-center">
+        <span class="bg-brandRed text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest text-white">Laga Penutup</span>
+        <h4 class="text-2xl font-oswald text-white mt-4 uppercase">Jumat</h4>
+        <p class="text-brandRed font-bold text-3xl font-oswald">5 Juni 2026</p>
+      </div>
       </div>
       
       <div class="mt-10 text-center">
@@ -656,10 +639,6 @@
               </li>
               <li class="flex items-start">
                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                Area Suporter Militan
-              </li>
-              <li class="flex items-start">
-                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Tersedia Voucher pada sisi belakang tiket fisik
               </li>
             </ul>
@@ -681,7 +660,7 @@
           <!-- Tribun Panglima -->
           <div class="bg-gradient-to-b from-[#111] to-brandDarker border-2 border-brandRed/80 p-5 md:p-8 rounded-2xl hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(201,58,51,0.25)] transition duration-500 relative flex flex-col z-10">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-brandRed text-white px-4 md:px-6 py-1 font-oswald uppercase tracking-widest text-[9px] md:text-[10px] font-bold shadow-lg rounded-sm whitespace-nowrap">
-              Paling Dicari
+              Paling Dicari (hanya 400 tiket tersedia)
             </div>
             <div class="mb-5 md:mb-6 mt-3 md:mt-4 flex-grow">
               <span class="text-brandRed font-oswald uppercase tracking-widest text-[10px] md:text-sm block mb-1 md:mb-2">Tribun Tertutup VIP</span>
@@ -695,10 +674,6 @@
               <li class="flex items-start">
                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
                 Parfum Persibangga
-              </li>
-              <li class="flex items-start">
-                <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                Jersey Kubangga
               </li>
               <li class="flex items-start">
                 <svg class="w-3.5 h-3.5 md:w-4 md:h-4 mr-2 text-brandRed shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
