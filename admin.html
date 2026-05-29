@@ -1,584 +1,1159 @@
 <!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Dashboard - Liga 4 Nasional</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<title>Admin Dashboard - Liga 4 Nasional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
+<script>
+tailwind.config = {
+theme: {
+extend: {
+fontFamily: {
+sans: ["Montserrat", "sans-serif"],
+oswald: ["Oswald", "sans-serif"],
+},
+colors: {
+brandRed: "#c93a33",
+brandDark: "#0a0a0a",
+brandDarker: "#050505",
+}
+},
+},
+};
+</script>
+<style>
+  #login-overlay.hidden {
+    display: none !important;
+}
 
-  <!-- Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Oswald:wght@500;700&display=swap" rel="stylesheet" />
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: rgba(10,10,10,0.5); border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #444; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #c93a33; }
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ["Montserrat", "sans-serif"],
-            oswald: ["Oswald", "sans-serif"],
-          },
-          colors: {
-            brandRed: "#c93a33",
-            brandDark: "#0a0a0a",
-            brandDarker: "#050505",
-          }
-        },
-      },
-    };
-  </script>
+/* Modal Animation */
+.modal-enter {
+animation: modalEnter 0.3s ease-out;
+}
+@keyframes modalEnter {
+from { opacity: 0; transform: scale(0.95) translateY(10px); }
+to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+/* Loading Animation */
+.spinner {
+border: 3px solid rgba(255,255,255,0.1);
+border-left-color: #fff;
+border-radius: 50%;
+width: 20px;
+height: 20px;
+animation: spin 1s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
+</style>
 </head>
 <body class="bg-brandDarker text-gray-300 font-sans antialiased min-h-screen flex flex-col">
 
-  <!-- Admin Navbar -->
-  <nav class="bg-black border-b border-gray-800 sticky top-0 z-50 shadow-lg">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <div class="flex items-center gap-3">
-          <div class="bg-brandRed text-white font-oswald font-bold px-3 py-1 rounded text-xl">L4</div>
-          <span class="font-oswald text-xl tracking-widest text-white uppercase hidden sm:block">Admin Panel</span>
+<div id="login-overlay" class="fixed inset-0 bg-brandDarker z-[200] flex items-center justify-center p-4">
+    <div class="bg-[#0a0a0a] border border-gray-800 p-8 rounded-2xl w-full max-w-sm shadow-2xl">
+        <div class="text-center mb-8">
+            <div class="bg-brandRed w-16 h-16 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <span class="text-white font-oswald font-bold text-3xl">L4</span>
+            </div>
+            <h1 class="text-white font-oswald text-2xl uppercase tracking-widest">Admin Login</h1>
+            <p class="text-gray-500 text-sm mt-2">Masuk untuk mengelola tiket</p>
         </div>
-        <div class="flex items-center gap-4">
-          <span class="text-sm text-gray-400">Halo, <strong class="text-white">Admin Tiket</strong></span>
-          <button class="bg-gray-800 hover:bg-gray-700 text-white text-xs px-4 py-2 rounded transition font-bold uppercase tracking-wider">Logout</button>
+        
+        <div class="space-y-4">
+            <input type="password" id="admin-pass" placeholder="Masukkan Password Admin" 
+                   class="w-full bg-[#111] border border-gray-700 text-white px-4 py-3 rounded-xl focus:border-brandRed focus:ring-1 focus:ring-brandRed outline-none transition">
+            <button onclick="handleLogin()" 
+                    class="w-full bg-brandRed hover:bg-red-700 text-white font-bold py-3 rounded-xl transition uppercase tracking-widest">
+                Login
+            </button>
         </div>
-      </div>
     </div>
-  </nav>
+</div>
 
-  <!-- Main Layout -->
-  <div class="flex-grow w-full max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col lg:flex-row gap-8">
+<div id="toast-notification" class="fixed top-5 left-1/2 -translate-x-1/2 w-[90%] sm:w-auto max-w-md px-4 sm:px-6 py-3 rounded-xl shadow-2xl z-[100] transform -translate-y-24 opacity-0 transition-all duration-300 font-bold tracking-wider flex items-center gap-2 text-sm sm:text-base pointer-events-none">
+<span id="toast-icon" class="shrink-0"></span>
+<span id="toast-message" class="truncate">Pesan disini</span>
+</div>
+
+<div id="notification-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[90] hidden items-center justify-center p-4">
+<div class="bg-[#0a0a0a] border border-gray-700 rounded-2xl w-full max-w-lg modal-enter overflow-hidden flex flex-col max-h-[90vh]">
+<div class="bg-gradient-to-r from-green-600 to-emerald-600 p-4 flex items-center gap-3 shrink-0">
+<div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center shrink-0">
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+</div>
+<div>
+<p class="text-white font-bold text-sm sm:text-base">Kirim Notifikasi Pembeli</p>
+<p class="text-white/80 text-xs sm:text-sm">E-Tiket & Code Penukaran</p>
+</div>
+</div>
+
+<div class="p-4 sm:p-6 space-y-4 overflow-y-auto custom-scrollbar">
+<div class="bg-gray-900/50 rounded-xl p-3 sm:p-4 border border-gray-800">
+<p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest font-bold mb-2">Informasi Pembeli</p>
+<p class="text-white font-bold text-base sm:text-lg" id="modal-buyer-name">-</p>
+<p class="text-gray-400 text-xs sm:text-sm" id="modal-buyer-contact">-</p>
+</div>
+
+<div class="bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl p-3 sm:p-4 border border-gray-700">
+<div class="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-0">
+<div>
+<p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">ID Transaksi</p>
+<p class="text-white font-oswald text-lg sm:text-xl tracking-widest" id="modal-tx-id">L4N-XXXX-XXXX</p>
+</div>
+<div class="sm:text-right w-full sm:w-auto">
+<p class="text-[10px] text-brandRed uppercase tracking-widest font-bold">Code Penukaran</p>
+<p class="text-brandRed font-oswald text-xl sm:text-2xl tracking-widest font-bold" id="modal-redeem-code">XXXXXX</p>
+</div>
+</div>
+</div>
+</div> <div class="p-4 border-t border-gray-800 bg-[#0a0a0a] shrink-0 flex gap-3">
+<button onclick="closeNotificationModal()" class="flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 rounded-xl font-bold uppercase tracking-wider transition text-xs sm:text-sm">Batal</button>
+<button onclick="confirmSendNotification()" id="btn-send-notification" class="flex-[2] bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white py-3 rounded-xl font-bold uppercase tracking-wider transition text-xs sm:text-sm flex items-center justify-center gap-2">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+Kirim
+</button>
+</div>
+</div>
+</div>
+
+<div id="success-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[95] hidden items-center justify-center p-4">
+<div class="bg-[#0a0a0a] border border-green-500/50 rounded-2xl w-full max-w-md modal-enter overflow-hidden flex flex-col max-h-[90vh]">
+<div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-center shrink-0">
+<div class="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+<svg class="w-8 h-8 sm:w-12 sm:h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+</div>
+<h3 class="text-xl sm:text-2xl font-oswald text-white uppercase tracking-widest">Berhasil!</h3>
+<p class="text-white/80 text-sm mt-1">Email & WhatsApp terkirim</p>
+</div>
+<div class="p-6 text-center overflow-y-auto custom-scrollbar">
+<p class="text-gray-400 text-xs sm:text-sm mb-2">Notifikasi berhasil dikirim ke:</p>
+<p class="text-white font-bold text-base sm:text-lg" id="success-buyer">-</p>
+<p class="text-gray-500 text-xs sm:text-sm" id="success-contact">-</p>
+<div class="mt-6 p-4 bg-gray-900/50 rounded-xl border border-gray-800 text-center">
+  <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-2">Code Penukaran</p>
+  <p class="text-brandRed font-oswald text-2xl sm:text-3xl tracking-widest font-bold" id="success-code">XXXXXX</p>
+  
+  <div class="bg-white p-2 sm:p-3 rounded-xl inline-block mt-3 mb-4 shadow-lg">
+    <svg id="success-barcode" class="mx-auto"></svg>
+  </div>
+  
+  <button onclick="downloadRedeemBarcode()" class="mx-auto flex items-center justify-center bg-gray-800 hover:bg-brandRed border border-gray-600 hover:border-brandRed text-white text-[10px] sm:text-xs font-bold px-4 py-2 sm:px-5 sm:py-2.5 rounded-full transition-all duration-300">
+    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+    Simpan Barcode (PNG)
+  </button>
+</div>
+</div>
+<div class="p-4 border-t border-gray-800 shrink-0">
+<button onclick="closeSuccessModal()" class="w-full bg-green-600 hover:bg-green-500 text-white py-3 sm:py-4 rounded-xl font-bold uppercase tracking-wider transition text-sm">Tutup</button>
+</div>
+</div>
+</div>
+
+<nav class="bg-black border-b border-gray-800 sticky top-0 z-50 shadow-lg">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-14 sm:h-16">
+<div class="flex items-center gap-2 sm:gap-3">
+<div class="bg-brandRed text-white font-oswald font-bold px-2 py-1 sm:px-3 rounded text-lg sm:text-xl">L4</div>
+<span class="font-oswald text-base sm:text-xl tracking-widest text-white uppercase font-bold sm:block">Admin Panel</span>
+</div>
+<div class="flex items-center gap-3 sm:gap-4">
+<span class="text-xs sm:text-sm text-gray-400 hidden sm:block">Halo, <strong class="text-white">Admin Tiket</strong></span>
+<button onclick="logout()" class="bg-gray-800 hover:bg-gray-700 text-white text-[10px] sm:text-xs px-3 py-1.5 sm:px-4 sm:py-2 rounded transition font-bold uppercase tracking-wider">Logout</button>
+</div>
+</div>
+</div>
+</nav>
+
+<div class="flex-grow w-full max-w-[90rem] mx-auto px-2 sm:px-6 lg:px-8 py-3 sm:py-8 flex flex-col lg:flex-row gap-4 sm:gap-8 relative">
+
+<div class="w-full lg:w-64 shrink-0">
+<div class="bg-[#0a0a0a]/95 backdrop-blur-md lg:border border-gray-800 lg:rounded-xl p-2 lg:p-4 sticky top-[56px] sm:top-[64px] lg:top-24 shadow-xl lg:shadow-2xl z-40 border-b border-gray-800 lg:border-b-0 -mx-2 px-4 sm:mx-0 sm:px-2">
+<p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest font-bold mb-2 lg:mb-4 hidden lg:block">Menu Utama</p>
+<div class="flex flex-row lg:flex-col gap-2 overflow-x-auto hide-scrollbar pb-1 lg:pb-0 snap-x">
+<button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg bg-brandRed text-white font-bold transition-all shadow-lg text-xs sm:text-sm">
+<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+<span class="whitespace-nowrap">Dashboard</span>
+</button>
+<button onclick="switchTab('transaksi')" id="btn-tab-transaksi" class="snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium text-xs sm:text-sm">
+<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+<span class="whitespace-nowrap">Transaksi Pending</span>
+</button>
+<button onclick="switchTab('penukaran')" id="btn-tab-penukaran" class="snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium text-xs sm:text-sm">
+<svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+<span class="whitespace-nowrap">Siap Ditukar</span>
+</button>
+<button onclick="switchTab('tiket')" id="btn-tab-tiket" class="snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium text-xs sm:text-sm">
+  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+  <span class="whitespace-nowrap">Kelola Tiket</span>
+</button>
+<button onclick="switchTab('histori')" id="btn-tab-histori" class="snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium text-xs sm:text-sm">
+  <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+  <span class="whitespace-nowrap">Histori Penukaran</span>
+</button>
+</div>
+</div>
+</div>
+
+<div class="flex-grow bg-[#0a0a0a] sm:border border-gray-800 rounded-xl overflow-hidden min-h-[500px] shadow-2xl mb-10 lg:mb-0">
+
+<div id="tab-dashboard" class="block p-4 sm:p-6">
+<h2 class="text-lg sm:text-2xl font-oswald text-white uppercase tracking-wide border-b border-gray-800 pb-3 mb-4 sm:mb-5">Ringkasan <span class="text-brandRed">Penjualan</span></h2>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
+<div class="bg-gray-900/50 border border-gray-800 p-4 sm:p-6 rounded-xl flex items-center gap-4">
+<div class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-blue-500/20 text-blue-500 flex justify-center items-center shrink-0">
+<svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+</div>
+<div>
+<p class="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest font-bold mb-1">Tiket Tertukar</p>
+<p class="text-xl sm:text-3xl font-oswald font-bold text-white" id="sum-terjual">0</p>
+</div>
+</div>
+<div class="bg-gray-900/50 border border-gray-800 p-4 sm:p-6 rounded-xl flex items-center gap-4">
+<div class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-green-500/20 text-green-500 flex justify-center items-center shrink-0">
+<svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</div>
+<div>
+<p class="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest font-bold mb-1">Siap Ditukar</p>
+<p class="text-xl sm:text-3xl font-oswald font-bold text-green-500" id="sum-siap-ditukar">0</p>
+</div>
+</div>
+<div class="bg-gray-900/50 border border-gray-800 p-4 sm:p-6 rounded-xl flex items-center gap-4">
+<div class="w-10 h-10 sm:w-14 sm:h-14 rounded-full bg-brandRed/20 text-brandRed flex justify-center items-center shrink-0">
+<svg class="w-5 h-5 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08-.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+</div>
+<div>
+<p class="text-gray-400 text-[10px] sm:text-xs uppercase tracking-widest font-bold mb-1">Total Pendapatan</p>
+<p class="text-lg sm:text-2xl font-oswald font-bold text-white truncate" id="sum-pendapatan">Rp 0</p>
+</div>
+</div>
+</div>
+<div class="mt-6 sm:mt-8">
+<h3 class="text-base sm:text-lg font-oswald text-white uppercase tracking-wide mb-3 sm:mb-4">Aktivitas <span class="text-brandRed">Terbaru</span></h3>
+<div id="recent-activity" class="space-y-2 sm:space-y-3"></div>
+</div>
+</div>
+
+<div id="tab-transaksi" class="hidden">
+<div class="p-4 sm:p-6 border-b border-gray-800 flex flex-col sm:flex-row justify-between items-start sm:items-center bg-black/50 gap-3 sm:gap-4">
+<h2 class="text-lg sm:text-xl font-oswald text-white uppercase tracking-wide">Data <span class="text-brandRed">Transaksi</span></h2>
+<div class="flex flex-row gap-2 text-[10px] sm:text-xs font-bold uppercase tracking-wider w-full sm:w-auto">
+<button onclick="renderPendingTable('all')" id="flt-pending-all" class="flex-1 sm:flex-none px-3 py-2 rounded transition border border-gray-600 text-gray-400 hover:bg-gray-700">Semua</button>
+<button onclick="renderPendingTable(0)" id="flt-pending-0" class="flex-1 sm:flex-none px-3 py-2 rounded transition border border-yellow-500 text-yellow-500 hover:bg-yellow-500/10">Pending</button>
+</div>
+</div>
+<div class="overflow-x-auto w-full max-h-[60vh] sm:max-h-[600px] overflow-y-auto custom-scrollbar relative">
+<table class="w-full text-left border-collapse min-w-[850px]">
+<thead class="sticky top-0 z-10">
+<tr class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest border-b border-gray-800 bg-gray-900 shadow-sm">
+<th class="p-3 sm:p-4 w-36 sm:w-40">ID & Waktu</th>
+<th class="p-3 sm:p-4 w-40 sm:w-48">Pembeli</th>
+<th class="p-3 sm:p-4 w-48 sm:w-56">Rincian Tiket</th>
+<th class="p-3 sm:p-4 w-32 sm:w-auto">Total & Metode</th>
+<th class="p-3 sm:p-4 text-center">Status</th>
+<th class="p-3 sm:p-4 text-center">Bukti</th>
+<th class="p-3 sm:p-4 text-right">Aksi</th>
+</tr>
+</thead>
+<tbody id="table-pending-body" class="text-xs sm:text-sm align-middle"></tbody>
+</table>
+<div id="empty-pending" class="hidden text-center py-12 sm:py-16 text-gray-500">
+<svg class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+<p class="text-base sm:text-lg font-bold text-gray-400">Tidak Ada Transaksi Pending</p>
+<p class="text-xs sm:text-sm mt-1">Semua transaksi sudah diproses</p>
+</div>
+</div>
+</div>
+
+<div id="tab-tiket" class="hidden">
+  <div class="p-4 sm:p-6 border-b border-gray-800 bg-black/50">
+    <h2 class="text-lg sm:text-2xl font-oswald text-white uppercase tracking-wide">Kelola <span class="text-brandRed">Status Tiket</span></h2>
+  </div>
+  
+  <div id="admin-ticket-list" class="p-4 sm:p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <p class="text-gray-500 italic animate-pulse">Memuat data tiket dari server...</p>
+  </div>
+</div>
+
+<div id="tab-penukaran" class="hidden">
+<div class="p-4 sm:p-6 border-b border-gray-800 bg-black/50">
+<div class="flex flex-row justify-between items-center gap-4">
+<h2 class="text-lg sm:text-2xl font-oswald text-white uppercase tracking-wide">List <span class="text-green-500">Siap Ditukar</span></h2>
+<div class="flex items-center gap-2 bg-green-500/10 border border-green-500/30 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full">
+<div class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+<span class="text-green-400 text-[10px] sm:text-xs font-bold" id="count-siap-ditukar">0 Tiket</span>
+</div>
+</div>
+</div>
+<div class="p-4 sm:p-6 bg-gray-900/30 border-b border-gray-800">
+  <h3 class="text-xs sm:text-sm font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
+    Scanner / Pencarian Manual
+  </h3>
+  
+  <div class="flex flex-col md:flex-row gap-2 sm:gap-3">
+    <div class="relative w-full">
+      <input type="text" id="search-input" placeholder="SCAN BARCODE / KETIK ID..." class="w-full pl-3 sm:pl-4 pr-20 sm:pr-24 py-3 sm:py-4 bg-[#111] border border-gray-600 rounded-xl focus:border-green-500 focus:ring-2 focus:ring-green-500 text-white font-oswald tracking-widest text-base sm:text-xl uppercase transition-all shadow-inner" autocomplete="off" autofocus />
+      <button onclick="searchTicket()" class="absolute right-1.5 sm:right-2 top-1.5 sm:top-2 bottom-1.5 sm:bottom-2 bg-gray-800 hover:bg-green-600 text-white px-3 sm:px-6 rounded-lg font-bold uppercase text-[10px] sm:text-sm transition-all shadow">Cari</button>
+    </div>
     
-    <!-- Sidebar / Tab Menu -->
-    <div class="w-full lg:w-64 shrink-0">
-      <div class="bg-[#0a0a0a] border border-gray-800 rounded-xl p-4 sticky top-24 shadow-2xl">
-        <p class="text-xs text-gray-500 uppercase tracking-widest font-bold mb-4 px-2">Menu Utama</p>
-        <div class="space-y-2">
-          <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg bg-brandRed text-white font-bold transition-all shadow-lg">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
-            Dashboard
+    <button onclick="startKameraScanner()" class="w-full md:w-auto shrink-0 bg-gray-800 hover:bg-brandRed border border-gray-600 hover:border-brandRed text-white font-bold py-3 px-4 md:px-6 rounded-xl transition flex items-center justify-center gap-2">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+      Scan Kamera
+    </button>
+  </div>
+
+  <div id="kamera-container" class="hidden mt-4 bg-black border border-gray-700 rounded-xl overflow-hidden p-2 relative w-full max-w-lg mx-auto shadow-lg">
+      <button onclick="stopKameraScanner()" class="absolute top-3 right-3 z-50 bg-red-600 text-white rounded-full p-2 hover:bg-red-700 shadow-lg transition-transform hover:scale-110">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+      <div id="reader" style="width: 100%;"></div>
+  </div>
+
+  <div id="search-error" class="hidden text-center py-4 sm:py-6 px-4 font-medium rounded-xl mb-4 shadow-inner mt-4">
+    <p id="err-title" class="text-sm sm:text-lg font-bold uppercase tracking-widest font-oswald"></p>
+    <p id="err-desc" class="text-[10px] sm:text-sm mt-1"></p>
+  </div>
+
+  <div id="search-result-area" class="hidden mt-4">
+    <div class="bg-gray-900/60 border border-green-500/30 rounded-xl shadow-lg overflow-hidden">
+      <div class="p-3 sm:p-5 flex justify-between items-start border-b border-gray-800 bg-green-500/5">
+        <div>
+          <p class="text-[9px] sm:text-[10px] text-green-400 uppercase tracking-widest font-bold">ID Valid - Lunas</p>
+          <p class="text-xl sm:text-2xl font-oswald text-white tracking-widest mt-1" id="res-id">L4N-XXXX-XXXX</p>
+          <p class="text-xs sm:text-base text-gray-200 font-bold uppercase mt-1" id="res-name">Nama Pemesan</p>
+        </div>
+        <span class="text-[9px] sm:text-xs font-bold uppercase tracking-widest bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-1 sm:px-3 sm:py-1.5 rounded">Siap Ditukar</span>
+      </div>
+      <div class="p-3 sm:p-5">
+        <p class="text-[10px] sm:text-xs text-brandRed uppercase tracking-widest font-bold mb-2 sm:mb-3">Siapkan Tiket Fisik Berikut:</p>
+        <ul class="space-y-2 mb-4 sm:mb-6" id="res-tickets"></ul>
+        <svg id="res-barcode" class="mx-auto mb-4"></svg>
+        <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <button onclick="copyRedeemCode()" class="w-full sm:flex-1 bg-gray-700 hover:bg-gray-600 text-white py-3 sm:py-5 rounded-xl shadow text-xs sm:text-base font-bold uppercase tracking-wider transition flex items-center justify-center gap-2">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            Salin Code
           </button>
-          <button onclick="switchTab('transaksi')" id="btn-tab-transaksi" class="w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            Data Transaksi
-          </button>
-          <button onclick="switchTab('penukaran')" id="btn-tab-penukaran" class="w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-            Penukaran Tiket
+          <button id="btn-redeem" onclick="redeemTicket()" class="w-full sm:flex-[2] bg-green-600 hover:bg-green-500 text-white py-3 sm:py-5 rounded-xl shadow-[0_10px_20px_rgba(22,163,74,0.3)] text-sm sm:text-xl font-bold uppercase tracking-widest font-oswald transition-all active:scale-95">
+            Tandai Telah Ditukar
           </button>
         </div>
       </div>
     </div>
+  </div>
+</div>
 
-    <!-- Content Area -->
-    <div class="flex-grow bg-[#0a0a0a] border border-gray-800 rounded-xl overflow-hidden min-h-[500px] shadow-2xl">
-      
-      <!-- TAB 1: DASHBOARD RINGKASAN -->
-      <div id="tab-dashboard" class="block p-6">
-        <h2 class="text-2xl font-oswald text-white uppercase tracking-wide border-b border-gray-800 pb-4 mb-6">Ringkasan <span class="text-brandRed">Penjualan</span></h2>
+<div class="overflow-x-auto w-full max-h-[50vh] sm:max-h-[500px] overflow-y-auto custom-scrollbar relative">
+<table class="w-full text-left border-collapse min-w-[850px]">
+<thead class="sticky top-0 z-10">
+<tr class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest border-b border-gray-800 bg-gray-900 shadow-sm">
+<th class="p-3 sm:p-4 w-36 sm:w-40">ID Transaksi</th>
+<th class="p-3 sm:p-4 w-40 sm:w-48">Pembeli</th>
+<th class="p-3 sm:p-4 w-48 sm:w-64">Tiket</th>
+<th class="p-3 sm:p-4">Total</th>
+<th class="p-3 sm:p-4 text-center">Code</th>
+<th class="p-3 sm:p-4 text-center">Status</th>
+<th class="p-3 sm:p-4 text-right">Aksi</th>
+</tr>
+</thead>
+<tbody id="table-redeem-body" class="text-xs sm:text-sm align-middle"></tbody>
+</table>
+<div id="empty-redeem" class="hidden text-center py-12 sm:py-16 text-gray-500">
+<svg class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
+<p class="text-base sm:text-lg font-bold text-gray-400">Belum Ada Tiket Siap Ditukar</p>
+<p class="text-xs sm:text-sm mt-1">Semua transaksi masih pending atau sudah ditukar</p>
+</div>
+</div>
+</div>
+
+<div id="tab-histori" class="hidden">
+  <div class="p-4 sm:p-6 border-b border-gray-800 bg-black/50">
+    <h2 class="text-lg sm:text-2xl font-oswald text-white uppercase tracking-wide">Histori <span class="text-blue-500">Penukaran</span></h2>
+  </div>
+  
+  <div class="overflow-x-auto w-full max-h-[60vh] sm:max-h-[600px] overflow-y-auto custom-scrollbar relative">
+    <table class="w-full text-left border-collapse min-w-[850px]">
+      <thead class="sticky top-0 z-10">
+        <tr class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest border-b border-gray-800 bg-gray-900 shadow-sm">
+          <th class="p-3 sm:p-4 w-36 sm:w-40">ID & Waktu</th>
+          <th class="p-3 sm:p-4 w-40 sm:w-48">Pembeli</th>
+          <th class="p-3 sm:p-4 w-48 sm:w-64">Tiket Ditukar</th>
+          <th class="p-3 sm:p-4 text-center">Code Redeem</th>
+          <th class="p-3 sm:p-4 text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody id="table-histori-body" class="text-xs sm:text-sm align-middle"></tbody>
+    </table>
+    <div id="empty-histori" class="hidden text-center py-12 sm:py-16 text-gray-500">
+      <svg class="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+      <p class="text-base sm:text-lg font-bold text-gray-400">Belum Ada Histori</p>
+      <p class="text-xs sm:text-sm mt-1">Belum ada tiket fisik yang berhasil ditukarkan</p>
+    </div>
+  </div>
+</div>
+
+</div>
+</div>
+<script>
+// 1. KONFIGURASI API & STATE
+const CONFIG = {
+  API_BASE_URL: '/api/api-rahasia',
+};
+let dbTransactions = [];
+let currentFilter = 'all';
+let currentPendingIndex = -1;
+let currentSearchedIndex = -1;
+let toastTimeout;
+
+// 2. FUNGSI HELPER UNTUK API (AUTH & FETCH)
+async function apiRequest(endpoint, method = 'GET', body = null) {
+    const token = localStorage.getItem('admin_token'); // Mengambil token dari memori browser
+    
+    const options = {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': token ? `Bearer ${token}` : '' // Menyisipkan token ke gembok
+        }
+    };
+    
+    if (body) options.body = JSON.stringify(body);
+    
+    const res = await fetch(`/api/api-rahasia${endpoint}`, options);
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Terjadi kesalahan sistem');
+    return data;
+}
+
+// 3. AUTENTIKASI (LOGIN & LOGOUT)
+document.addEventListener("DOMContentLoaded", function() {
+  if (!localStorage.getItem("admin_token")) { 
+    document.getElementById("login-overlay").classList.remove("hidden");
+  } else {
+    document.getElementById("login-overlay").classList.add("hidden");
+    loadAllTransactions(); 
+  }
+});
+
+async function handleLogin() {
+  const passInput = document.getElementById("admin-pass");
+  const btnLogin = document.querySelector("#login-overlay button");
+  const originalText = btnLogin.innerText;
+
+  if (!passInput.value.trim()) return showToast("Password wajib diisi!", "error");
+
+  btnLogin.innerHTML = "Memeriksa...";
+  btnLogin.disabled = true;
+
+  try {
+    const response = await apiRequest('/login', 'POST', { 
+      password: passInput.value 
+    });
+
+    localStorage.setItem("admin_token", response.data.token);
+    document.getElementById("login-overlay").classList.add("hidden");
+    showToast("Login Berhasil!", "success");
+    passInput.value = "";
+    
+    loadAllTransactions(); // Tarik data setelah login
+  } catch (error) {
+    showToast(error.message, "error");
+  } finally {
+    btnLogin.innerHTML = originalText;
+    btnLogin.disabled = false;
+  }
+}
+
+function handleForceLogout() {
+  localStorage.removeItem("admin_token"); 
+  document.getElementById("login-overlay").classList.remove("hidden");
+}
+
+function logout() {
+  if (confirm('Yakin ingin keluar dari Dashboard?')) {
+    // Opsional: Hit API logout untuk menghapus token di server
+    apiRequest('/logout', 'POST').catch(e => console.log(e)); 
+    handleForceLogout();
+    showToast("Anda telah logout", "success");
+  }
+}
+
+// 4. LOAD DATA TRANSAKSI DARI BACKEND
+async function loadAllTransactions() {
+  try {
+    const response = await apiRequest('/transactions', 'GET');
+    dbTransactions = response.data || [];
+    
+    updateSummary();
+    renderPendingTable(currentFilter);
+    renderRedeemTable();
+  } catch (error) {
+    showToast("Gagal memuat data transaksi", "error");
+  }
+}
+
+// 5. PROSES TERIMA PEMBAYARAN (APPROVE)
+async function confirmSendNotification() {
+  if (currentPendingIndex === -1) return;
+  const tx = dbTransactions[currentPendingIndex];
+  const btn = document.getElementById('btn-send-notification');
+  
+  btn.innerHTML = '<div class="spinner"></div> Mengirim...';
+  btn.disabled = true;
+
+  try {
+    const response = await apiRequest(`/transactions/${tx.id}/approve`, 'POST');
+    
+    // Update data lokal berdasarkan respons backend
+    tx.status = 1; 
+    tx.redeemCode = response.data.redeem_code; // Ambil code dari backend
+
+    document.getElementById('success-buyer').innerText = tx.name;
+    document.getElementById('success-contact').innerText = `${tx.email} | ${tx.wa}`;
+    document.getElementById('success-code').innerText = tx.redeemCode;
+
+    try {
+      JsBarcode("#success-barcode", tx.redeemCode, {
+    format: "CODE128", 
+    width: 2, 
+    height: 50, 
+    displayValue: true,
+    background: "#ffffff", // Wajib putih bersih
+    lineColor: "#000000",  // Wajib hitam pekat
+    margin: 10, 
+    fontSize: 14, 
+    font: "Oswald"
+});
+    } catch(e) {}
+
+    closeNotificationModal();
+    document.getElementById('success-modal').classList.remove('hidden');
+    document.getElementById('success-modal').classList.add('flex');
+
+    showToast(`Tiket disetujui. Notifikasi terkirim ke ${tx.name}!`, 'success');
+    
+    // Refresh UI
+    updateSummary();
+    renderPendingTable(currentFilter);
+    renderRedeemTable();
+
+  } catch (error) {
+    showToast(error.message, "error");
+  } finally {
+    btn.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg> Kirim';
+    btn.disabled = false;
+  }
+}
+
+// 6. PROSES TOLAK PEMBAYARAN (REJECT)
+async function updatePaymentStatus(index, newStatus) {
+  const tx = dbTransactions[index];
+  if(!confirm(`Yakin ingin menolak transaksi ${tx.id}?`)) return;
+
+  try {
+    await apiRequest(`/transactions/${tx.id}/reject`, 'POST');
+    
+    tx.status = newStatus; // 3 = Ditolak
+    showToast(`Transaksi ${tx.id} berhasil ditolak!`, 'error');
+    
+    renderPendingTable(currentFilter);
+    updateSummary();
+  } catch (error) {
+    showToast("Gagal menolak transaksi: " + error.message, "error");
+  }
+}
+
+// 7. PROSES PENUKARAN TIKET (REDEEM FISIK)
+async function processRedeem(tx) {
+  try {
+    await apiRequest(`/tickets/redeem`, 'POST', { redeem_code: tx.redeemCode });
+    
+    tx.status = 2; // 2 = Sudah Ditukar
+    showToast("Penukaran Sukses! Tiket fisik sudah diserahkan.", 'success');
+    
+    // Reset UI Scanner
+    document.getElementById('search-result-area').classList.add('hidden');
+    const inputEl = document.getElementById('search-input');
+    inputEl.value = ''; 
+    inputEl.focus();
+    currentSearchedIndex = -1;
+    
+    updateSummary(); 
+    renderRedeemTable();
+  } catch (error) {
+    showToast("Gagal menukar tiket: " + error.message, "error");
+  }
+}
+
+function redeemTicket() {
+  if (currentSearchedIndex !== -1) {
+    const tx = dbTransactions[currentSearchedIndex];
+    if (confirm(`Konfirmasi penukaran tiket?\n\nNama: ${tx.name}\nID: ${tx.id}\nCode: ${tx.redeemCode}`)) {
+      processRedeem(tx);
+    }
+  }
+}
+
+function redeemFromTable(index) {
+  const tx = dbTransactions[index];
+  if (confirm(`Yakin ingin menukar tiket untuk ${tx.name}?\n\nID: ${tx.id}\nCode: ${tx.redeemCode}`)) {
+    processRedeem(tx);
+  }
+}
+
+// 1. Fungsi untuk menarik data dari API dan menempelkannya ke HTML
+async function loadTicketsAdmin() {
+    const container = document.getElementById('admin-ticket-list');
+    if (!container) return; // Mencegah error jika div belum ada
+
+    try {
+        container.innerHTML = '<p class="text-gray-500 italic animate-pulse">Sedang memuat data...</p>';
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-gray-900/50 border border-gray-800 p-6 rounded-xl flex items-center gap-4">
-            <div class="w-14 h-14 rounded-full bg-blue-500/20 text-blue-500 flex justify-center items-center shrink-0">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs uppercase tracking-widest font-bold mb-1">Tiket Terjual (Lunas)</p>
-              <p class="text-3xl font-oswald font-bold text-white" id="sum-terjual">0</p>
-            </div>
-          </div>
-
-          <div class="bg-gray-900/50 border border-gray-800 p-6 rounded-xl flex items-center gap-4">
-            <div class="w-14 h-14 rounded-full bg-yellow-500/20 text-yellow-500 flex justify-center items-center shrink-0">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs uppercase tracking-widest font-bold mb-1">Menunggu Verifikasi</p>
-              <p class="text-3xl font-oswald font-bold text-white" id="sum-pending">0</p>
-            </div>
-          </div>
-
-          <div class="bg-gray-900/50 border border-gray-800 p-6 rounded-xl flex items-center gap-4">
-            <div class="w-14 h-14 rounded-full bg-green-500/20 text-green-500 flex justify-center items-center shrink-0">
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-            </div>
-            <div>
-              <p class="text-gray-400 text-xs uppercase tracking-widest font-bold mb-1">Total Pendapatan</p>
-              <p class="text-2xl font-oswald font-bold text-white" id="sum-pendapatan">Rp 0</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB 2: DATA TRANSAKSI -->
-      <div id="tab-transaksi" class="hidden">
-        <div class="p-6 border-b border-gray-800 flex flex-col md:flex-row justify-between items-center bg-black/50 gap-4">
-          <h2 class="text-xl font-oswald text-white uppercase tracking-wide">Data <span class="text-brandRed">Transaksi</span></h2>
-          <div class="flex gap-2 text-xs font-bold uppercase tracking-wider">
-            <button onclick="renderTable('all')" id="flt-all" class="px-3 py-1.5 rounded bg-gray-700 text-white">Semua</button>
-            <button onclick="renderTable(0)" id="flt-0" class="px-3 py-1.5 rounded border border-yellow-500 text-yellow-500 hover:bg-yellow-500/10">Pending</button>
-            <button onclick="renderTable(1)" id="flt-1" class="px-3 py-1.5 rounded border border-green-500 text-green-500 hover:bg-green-500/10">Lunas</button>
-            <button onclick="renderTable(3)" id="flt-3" class="px-3 py-1.5 rounded border border-red-500 text-red-500 hover:bg-red-500/10">Gagal</button>
-          </div>
-        </div>
+        const res = await fetch('/api/tickets');
+        if (!res.ok) throw new Error("Gagal mengambil data tiket dari server");
         
-        <div class="overflow-x-auto w-full">
-          <table class="w-full text-left border-collapse min-w-[900px]">
-            <thead>
-              <tr class="text-xs text-gray-500 uppercase tracking-widest border-b border-gray-800 bg-gray-900/30">
-                <th class="p-4 w-48">ID & Waktu</th>
-                <th class="p-4 w-56">Data Pembeli</th>
-                <th class="p-4 w-64">Rincian Tiket</th>
-                <th class="p-4">Pembayaran</th>
-                <th class="p-4 text-center">Status</th>
-                <th class="p-4 text-right">Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="table-tx-body" class="text-sm align-top">
-              <!-- Diisi oleh Javascript -->
-            </tbody>
-          </table>
-          <div id="empty-tx" class="hidden text-center py-16 text-gray-500">
-            <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-            <p>Tidak ada data transaksi yang sesuai.</p>
-          </div>
-        </div>
-      </div>
+        const response = await res.json();
+        const tickets = response.data || [];
+        
+        container.innerHTML = ''; // Bersihkan loading
 
-      <!-- TAB 3: PENUKARAN TIKET FISIK -->
-      <div id="tab-penukaran" class="hidden">
-        <div class="p-6 md:p-8 border-b border-gray-800 bg-black/50">
-          <h2 class="text-2xl md:text-3xl font-oswald text-white uppercase tracking-wide">Validasi & <span class="text-brandRed">Tukar Tiket Fisik</span></h2>
-          <p class="text-xs md:text-sm text-gray-400 mt-2">Pindai Barcode / ketik ID Transaksi untuk mengecek validitas dan menyerahkan tiket fisik ke penonton.</p>
-        </div>
+        if(tickets.length === 0) {
+            container.innerHTML = '<p class="text-gray-500 font-bold">Belum ada tiket di database.</p>';
+            return;
+        }
 
-        <div class="p-6 md:p-8">
-          <!-- Area Pencarian Premium -->
-          <div class="bg-gray-900/40 border border-gray-800 rounded-2xl p-5 md:p-6 mb-8 flex flex-col md:flex-row items-center gap-4 shadow-inner">
-            <div class="relative w-full md:w-2/3">
-              <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-              </div>
-              <input type="text" id="search-input" placeholder="Ketik ID Transaksi / Scan Disini..." class="w-full pl-12 pr-24 py-4 md:py-5 bg-[#050505] border border-gray-700 rounded-xl focus:border-brandRed focus:ring-1 focus:ring-brandRed text-white font-oswald tracking-widest text-lg md:text-xl uppercase transition-all shadow-[0_0_15px_rgba(0,0,0,0.5)]" />
-              <button onclick="searchTicket()" class="absolute right-2 top-2 bottom-2 bg-brandRed hover:bg-brandRedDark text-white px-5 md:px-8 rounded-lg font-bold uppercase tracking-widest text-xs transition-all shadow-lg">Cari</button>
-            </div>
-            <div class="w-full md:w-1/3 flex items-center">
-              <div class="w-full h-px bg-gray-800 md:hidden mb-4"></div>
-              <button onclick="simulateScanBarcode()" class="w-full py-4 md:py-5 bg-blue-600/10 border border-blue-600/50 hover:bg-blue-600/20 text-blue-400 hover:text-blue-300 rounded-xl font-bold flex items-center justify-center gap-3 transition-all duration-300 uppercase tracking-widest text-sm shadow-lg group">
-                <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm14 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z"></path></svg>
-                Gunakan Scanner
-              </button>
-            </div>
-          </div>
+        tickets.forEach(ticket => {
+            // Pastikan nilai boolean dari database terbaca dengan benar
+            const isSoldOut = ticket.is_sold_out == 1 || ticket.is_sold_out === true;
+            
+            const statusBadge = isSoldOut 
+                ? '<span class="bg-red-900/50 text-red-500 border border-red-500/50 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">SOLD OUT</span>'
+                : '<span class="bg-green-900/50 text-green-500 border border-green-500/50 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest">TERSEDIA</span>';
+            
+            const btnAction = isSoldOut
+                ? `<button onclick="toggleSoldOut('${ticket.ticket_id}')" class="w-full mt-4 bg-green-600 hover:bg-green-500 text-white font-bold py-2 sm:py-3 rounded transition uppercase tracking-widest text-[10px] sm:text-xs">Buka Penjualan</button>`
+                : `<button onclick="toggleSoldOut('${ticket.ticket_id}')" class="w-full mt-4 bg-red-600 hover:bg-red-500 text-white font-bold py-2 sm:py-3 rounded transition uppercase tracking-widest text-[10px] sm:text-xs">Set Sold Out</button>`;
 
-          <!-- Area Hasil Pencarian (Bentuk Ticket Stub) -->
-          <div id="search-result-area" class="hidden transition-all duration-500">
-            <div class="bg-gradient-to-br from-[#111] to-[#050505] border border-gray-700 rounded-2xl relative overflow-hidden shadow-[0_15px_50px_rgba(0,0,0,0.5)]">
-              
-              <!-- Container Stempel / Watermark -->
-              <div id="status-watermark" class="absolute inset-0 z-0 pointer-events-none overflow-hidden"></div>
-
-              <div class="flex flex-col md:flex-row relative z-10">
-                <!-- Info Kiri (Bagian Tiket Besar) -->
-                <div class="w-full md:w-2/3 p-6 md:p-8">
-                  <div class="flex justify-between items-start mb-6">
+            container.innerHTML += `
+                <div class="bg-gray-900/50 border border-gray-800 p-4 sm:p-5 rounded-xl flex flex-col justify-between hover:border-gray-600 transition duration-300">
                     <div>
-                      <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-1">Kode Transaksi</p>
-                      <p class="text-3xl md:text-4xl font-oswald text-white font-bold tracking-widest" id="res-id">L4N-XXXX</p>
+                        <p class="text-[10px] sm:text-xs text-gray-500 uppercase tracking-widest mb-1 font-bold">${ticket.ticket_id}</p>
+                        <h3 class="text-lg sm:text-xl font-oswald text-white uppercase tracking-wide mb-3">${ticket.name}</h3>
+                        ${statusBadge}
+                        <div class="mt-4 p-3 bg-black/40 rounded-lg border border-gray-800">
+                            <p class="text-gray-400 text-xs">Harga: <strong class="text-white text-sm">Rp ${Number(ticket.price).toLocaleString('id-ID')}</strong></p>
+                            <p class="text-gray-400 text-xs mt-1">Sisa Kuota: <strong class="text-white">${ticket.quota}</strong></p>
+                        </div>
                     </div>
-                    <div class="text-right">
-                      <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-1">Status Pembayaran</p>
-                      <p class="text-xs md:text-sm font-bold text-green-500 uppercase bg-green-500/10 px-3 py-1.5 rounded border border-green-500/20 shadow-inner" id="res-payment">Telah Diverifikasi</p>
-                    </div>
-                  </div>
-                  
-                  <div class="mb-6">
-                    <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-1">Nama Penonton / Pemesan</p>
-                    <p class="text-lg md:text-xl text-gray-200 font-bold uppercase flex items-center gap-2">
-                      <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                      <span id="res-name">Nama</span>
-                    </p>
-                  </div>
-
-                  <!-- Box Rincian Tiket -->
-                  <div class="bg-black/60 border border-gray-800 rounded-xl p-5 md:p-6 relative mt-8">
-                    <p class="text-[10px] md:text-xs bg-gray-800 text-gray-300 uppercase tracking-widest px-4 py-1.5 rounded-t-lg absolute -top-4 md:-top-5 left-4 border border-gray-700 shadow-md font-bold">Serahkan Tiket Fisik Berikut:</p>
-                    <ul class="text-sm text-white space-y-3 font-medium mt-3" id="res-tickets">
-                      <!-- Diisi oleh Javascript -->
-                    </ul>
-                  </div>
+                    ${btnAction}
                 </div>
+            `;
+        });
+    } catch (error) {
+        console.error("Error loadTicketsAdmin:", error);
+        container.innerHTML = `<p class="text-red-500 font-bold">Terjadi kesalahan: ${error.message}</p>`;
+        showToast("Gagal memuat tiket", "error");
+    }
+}
+// 2. Fungsi untuk mengubah status Sold Out
+async function toggleSoldOut(ticketId) {
+    try {
+        // Karena toggle adalah aksi admin, pastikan apiRequest membawa token (sudah bawaan)
+        const response = await apiRequest(`/tickets/${ticketId}/toggle-soldout`, 'POST');
+        showToast(response.message, 'success');
+        
+        // Refresh layar tiket agar status berubah
+        loadTicketsAdmin(); 
+    } catch (error) {
+        console.error("Error toggle:", error);
+        showToast("Gagal mengubah status tiket", "error");
+    }
+}
 
-                <!-- Info Kanan & Aksi (Bagian Potongan Tiket) -->
-                <div class="w-full md:w-1/3 p-6 md:p-8 border-t md:border-t-0 md:border-l-2 border-dashed border-gray-600 bg-[#0a0a0a] flex flex-col justify-center items-center text-center relative">
-                  
-                  <!-- Setengah lingkaran pemisah untuk efek tiket -->
-                  <div class="hidden md:block absolute -left-3.5 top-[-15px] w-6 h-6 bg-brandDarker rounded-full border-b border-gray-600"></div>
-                  <div class="hidden md:block absolute -left-3.5 bottom-[-15px] w-6 h-6 bg-brandDarker rounded-full border-t border-gray-600"></div>
 
-                  <p class="text-[10px] md:text-xs text-gray-500 uppercase tracking-widest mb-3 font-bold">Validasi Penukaran</p>
-                  <div id="redeem-status-badge" class="inline-block px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6 w-full max-w-[200px] border">Belum Ditukar</div>
-                  
-                  <button id="btn-redeem" onclick="redeemTicket()" class="w-full bg-green-600 hover:bg-green-500 text-white py-4 md:py-5 rounded-xl font-oswald uppercase tracking-widest font-bold transition-all shadow-[0_0_20px_rgba(22,163,74,0.3)] text-sm md:text-base group">
-                    <span class="block group-hover:scale-105 transition-transform">Selesaikan Penukaran</span>
-                  </button>
-                  
-                  <p id="redeem-hint" class="text-[10px] text-gray-500 mt-5 leading-relaxed italic border-t border-gray-800 pt-4">Pastikan tiket fisik & voucher telah berada di tangan penonton sebelum menekan tombol ini.</p>
-                </div>
+// KODE UI & RENDER 
+function showToast(message, type = 'success') {
+  const toast = document.getElementById('toast-notification');
+  const icon = document.getElementById('toast-icon');
+  const msgText = document.getElementById('toast-message');
+  clearTimeout(toastTimeout);
+  msgText.innerText = message;
+  
+  const baseClasses = "fixed top-5 left-1/2 -translate-x-1/2 w-[90%] sm:w-auto max-w-md px-4 sm:px-6 py-3 rounded-xl shadow-2xl z-[100] transform transition-all duration-300 font-bold tracking-wider flex items-center gap-2 text-sm sm:text-base pointer-events-none translate-y-0 opacity-100";
+  toast.className = type === 'success' 
+    ? `${baseClasses} bg-green-500 text-white` 
+    : `${baseClasses} bg-red-600 text-white`;
+    
+  icon.innerHTML = type === 'success' 
+    ? '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>'
+    : '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+    
+  toastTimeout = setTimeout(() => {
+    toast.classList.add('-translate-y-24', 'opacity-0');
+    toast.classList.remove('translate-y-0', 'opacity-100');
+  }, 3000);
+}
 
-              </div>
-            </div>
-          </div>
+function switchTab(tabName) {
+    // 1. Tambahkan 'histori' di dalam array ini:
+    ['dashboard', 'transaksi', 'penukaran', 'tiket', 'histori'].forEach(t => {
+        document.getElementById(`tab-${t}`).classList.add('hidden');
+        const btn = document.getElementById(`btn-tab-${t}`);
+        if(btn) btn.className = "snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium text-xs sm:text-sm";
+    });
+    
+    document.getElementById(`tab-${tabName}`).classList.remove('hidden');
+    const activeBtn = document.getElementById(`btn-tab-${tabName}`);
+    if(activeBtn) activeBtn.className = "snap-start shrink-0 flex-1 lg:w-full flex items-center justify-center lg:justify-start gap-2 text-left px-3 py-3 lg:px-4 lg:py-3 rounded-lg bg-brandRed text-white font-bold transition-all shadow-lg text-xs sm:text-sm";
 
-          <!-- Pesan Error / Not Found -->
-          <div id="search-error" class="hidden text-center py-10 md:py-16 text-brandRed font-medium bg-red-900/10 border border-red-900/30 rounded-xl mt-4 shadow-inner">
-            <svg class="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-            <p class="text-sm md:text-base uppercase tracking-widest font-oswald">Data Tidak Ditemukan / Belum Diverifikasi</p>
-            <p class="text-xs text-gray-400 mt-2">Pastikan ID Transaksi benar dan pembayaran telah berstatus Lunas.</p>
-          </div>
-
-        </div>
-      </div>
-
-  <script>
-    // ==========================================
-    // SIMULASI DATABASE (Dummy Data)
-    // ==========================================
-    // Status: 0=Pending, 1=Lunas/Siap Tukar, 2=Ditukar Fisik, 3=Gagal/Ditolak
-    let dbTransactions = [
-      {
-        id: "L4N-2026-A12BC",
-        datetime: "22 Mei 2026, 10:15 WIB",
-        name: "Budi Santoso",
-        wa: "081234567890",
-        email: "budi@email.com",
-        method: "Transfer BPD Jateng",
-        total: 280123, 
-        status: 0,
-        tickets: [{ name: "Tribun Panglima", qty: 1 }, { name: "Tribun Gerilya", qty: 1 }]
-      },
-      {
-        id: "L4N-2026-X89AQ",
-        datetime: "22 Mei 2026, 11:30 WIB",
-        name: "Ahmad Zulfika",
-        wa: "082224142936",
-        email: "zulfika@email.com",
-        method: "QRIS BPD Jateng",
-        total: 400567, 
-        status: 0,
-        tickets: [{ name: "Tribun Panglima", qty: 2 }]
-      },
-      {
-        id: "L4N-2026-QWERT",
-        datetime: "21 Mei 2026, 16:45 WIB",
-        name: "Slamet Raharjo",
-        wa: "085712345678",
-        email: "slamet@email.com",
-        method: "Transfer BPD Jateng",
-        total: 120888, 
-        status: 1, 
-        tickets: [{ name: "Tribun Palagan", qty: 1 }]
-      },
-      {
-        id: "L4N-2026-ZXCVB",
-        datetime: "20 Mei 2026, 09:10 WIB",
-        name: "Wahyu Hidayat",
-        wa: "081998877665",
-        email: "wahyu@email.com",
-        method: "QRIS BPD Jateng",
-        total: 80456, 
-        status: 2, 
-        tickets: [{ name: "Tribun Gerilya", qty: 1 }]
-      },
-      {
-        id: "L4N-2026-FAILS",
-        datetime: "22 Mei 2026, 08:00 WIB",
-        name: "Joko Anwar",
-        wa: "081122334455",
-        email: "joko@email.com",
-        method: "Transfer BPD Jateng",
-        total: 200111, 
-        status: 3, // Gagal/Ditolak
-        tickets: [{ name: "Tribun Panglima", qty: 1 }]
-      }
-    ];
-
-    let currentFilter = 'all';
-
-    // ==========================================
-    // LOGIKA TAB MENU
-    // ==========================================
-    function switchTab(tabName) {
-      // Sembunyikan semua konten
-      document.getElementById('tab-dashboard').classList.add('hidden');
-      document.getElementById('tab-transaksi').classList.add('hidden');
-      document.getElementById('tab-penukaran').classList.add('hidden');
-      
-      // Reset warna tombol sidebar
-      const tabs = ['dashboard', 'transaksi', 'penukaran'];
-      tabs.forEach(t => {
-        document.getElementById(`btn-tab-${t}`).className = "w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg text-gray-400 hover:bg-gray-900 hover:text-white transition-all font-medium";
-      });
-
-      // Aktifkan tab yang dipilih
-      document.getElementById(`tab-${tabName}`).classList.remove('hidden');
-      document.getElementById(`btn-tab-${tabName}`).className = "w-full flex items-center gap-3 text-left px-4 py-3 rounded-lg bg-brandRed text-white font-bold transition-all shadow-lg";
-
-      // Trigger fungsi spesifik per tab
-      if (tabName === 'dashboard') updateSummary();
-      if (tabName === 'transaksi') renderTable(currentFilter);
-      if (tabName === 'penukaran') {
+    if (tabName === 'dashboard') updateSummary();
+    if (tabName === 'transaksi') renderPendingTable('all');
+    if (tabName === 'tiket') loadTicketsAdmin(); 
+    if (tabName === 'histori') renderHistoriTable(); // <--- 2. Tambahkan ini
+    if (tabName === 'penukaran') {
         document.getElementById('search-input').value = "";
         document.getElementById('search-result-area').classList.add('hidden');
         document.getElementById('search-error').classList.add('hidden');
-      }
+        renderRedeemTable();
+        setTimeout(() => document.getElementById('search-input').focus(), 100);
     }
+}
+function updateSummary() {
+  let tertukar = 0, siapDitukar = 0, pendapatan = 0;
+  dbTransactions.forEach(tx => {
+    if (tx.status === 2) { tertukar++; pendapatan += tx.total; }
+    if (tx.status === 1) { siapDitukar++; pendapatan += tx.total; }
+  });
+  document.getElementById('sum-terjual').innerText = tertukar;
+  document.getElementById('sum-siap-ditukar').innerText = siapDitukar;
+  document.getElementById('sum-pendapatan').innerText = "Rp " + pendapatan.toLocaleString('id-ID');
+  updateRecentActivity();
+}
 
-    // ==========================================
-    // TAB 1: DASHBOARD RINGKASAN
-    // ==========================================
-    function updateSummary() {
-      let terjual = 0;
-      let pendingCount = 0;
-      let pendapatan = 0;
+function updateRecentActivity() {
+  const container = document.getElementById('recent-activity');
+  const activities = dbTransactions
+    .filter(tx => tx.status === 1 || tx.status === 2)
+    .map(tx => ({
+      type: tx.status === 1 ? 'lunas' : 'ditukar',
+      text: `${tx.id} - ${tx.name} ${tx.status === 1 ? 'LUNAS' : 'SUDAH DITUKAR'}`,
+      time: tx.datetime,
+      redeemCode: tx.redeemCode,
+      wa: tx.wa,       
+      email: tx.email  
+    }))
+    .sort((a, b) => b.time.localeCompare(a.time))
+    .slice(0, 5);
 
-      dbTransactions.forEach(tx => {
-        if (tx.status === 0) pendingCount++;
-        // Hanya hitung Lunas(1) & Ditukar(2) sebagai valid
-        if (tx.status === 1 || tx.status === 2) {
-          pendapatan += tx.total;
-          tx.tickets.forEach(t => terjual += t.qty);
-        }
-      });
-
-      document.getElementById('sum-terjual').innerText = terjual;
-      document.getElementById('sum-pending').innerText = pendingCount;
-      document.getElementById('sum-pendapatan').innerText = "Rp " + pendapatan.toLocaleString('id-ID');
-    }
-
-    // ==========================================
-    // TAB 2: DATA TRANSAKSI
-    // ==========================================
-    function renderTable(filterStatus) {
-      currentFilter = filterStatus;
-      const tbody = document.getElementById('table-tx-body');
-      tbody.innerHTML = "";
-
-      // Update Filter Button UI
-      const filters = ['all', 0, 1, 3];
-      filters.forEach(f => {
-        const btn = document.getElementById(`flt-${f}`);
-        if(btn) {
-          // Reset style
-          if(f === 'all') btn.className = "px-3 py-1.5 rounded border border-gray-600 text-gray-400 hover:bg-gray-700";
-          if(f === 0) btn.className = "px-3 py-1.5 rounded border border-yellow-500 text-yellow-500 hover:bg-yellow-500/10";
-          if(f === 1) btn.className = "px-3 py-1.5 rounded border border-green-500 text-green-500 hover:bg-green-500/10";
-          if(f === 3) btn.className = "px-3 py-1.5 rounded border border-red-500 text-red-500 hover:bg-red-500/10";
-        }
-      });
-
-      // Active style
-      if(filterStatus === 'all') document.getElementById('flt-all').className = "px-3 py-1.5 rounded bg-gray-700 text-white";
-      if(filterStatus === 0) document.getElementById('flt-0').className = "px-3 py-1.5 rounded bg-yellow-500 text-black";
-      if(filterStatus === 1) document.getElementById('flt-1').className = "px-3 py-1.5 rounded bg-green-500 text-white";
-      if(filterStatus === 3) document.getElementById('flt-3').className = "px-3 py-1.5 rounded bg-red-500 text-white";
-
-      // Filter Data
-      const filteredData = dbTransactions.filter(tx => {
-        if (filterStatus === 'all') return true;
-        if (filterStatus === 1) return tx.status === 1 || tx.status === 2; // Anggap sukses & ditukar sebagai LUNAS
-        return tx.status === filterStatus;
-      });
-
-      if (filteredData.length === 0) {
-        document.getElementById('empty-tx').classList.remove('hidden');
-      } else {
-        document.getElementById('empty-tx').classList.add('hidden');
+  let html = '';
+  activities.forEach(act => {
+    const isLunas = act.type === 'lunas';
+    const colorClass = isLunas ? 'text-green-500' : 'text-blue-500'; 
+    const bgClass = isLunas ? 'bg-green-500/10 border border-green-500/20' : 'bg-blue-500/10 border border-blue-500/20';
+    const iconSvg = isLunas 
+      ? '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+      : '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+    
+    const waLink = "https://wa.me/" + (act.wa ? act.wa.replace(/^0/, '62') : '');
+    const emailLink = "mailto:" + (act.email || '');
+    
+    html += `
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 rounded-lg ${bgClass}">
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <span class="${colorClass} shrink-0">${iconSvg}</span>
+          <div class="flex-grow min-w-0">
+            <p class="text-xs sm:text-sm text-gray-300 truncate">${act.text}</p>
+            <p class="text-[10px] text-gray-500">${act.time}</p>
+          </div>
+        </div>
         
-        filteredData.forEach((tx) => {
-          const realIndex = dbTransactions.findIndex(t => t.id === tx.id);
-          
-          // Format Link WA
-          const waLink = "https://wa.me/" + tx.wa.replace(/^0/, '62');
-          const emailLink = "mailto:" + tx.email;
+        <div class="flex items-center gap-2 w-full sm:w-auto mt-2 sm:mt-0">
+          <a href="${waLink}" target="_blank" class="bg-green-500/20 hover:bg-green-500/40 text-green-400 p-1.5 rounded transition" title="Chat WhatsApp">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+          </a>
+          <a href="${emailLink}" class="bg-blue-500/20 hover:bg-blue-500/40 text-blue-400 p-1.5 rounded transition" title="Kirim Email">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+          </a>
+          ${act.redeemCode ? `<span class="text-brandRed font-bold text-[10px] sm:text-xs bg-brandRed/10 px-2 py-1.5 rounded shrink-0 ml-1">${act.redeemCode}</span>` : ''}
+        </div>
+      </div>`;
+  });
+  container.innerHTML = html || '<p class="text-gray-500 text-sm">Belum ada aktivitas</p>';
+}
 
-          // Format Rincian Tiket
-          let ticketListHtml = `<ul class="list-disc pl-4 space-y-1 text-xs text-gray-300">`;
-          tx.tickets.forEach(t => {
-            ticketListHtml += `<li><span class="font-bold text-white">${t.qty}x</span> ${t.name}</li>`;
-          });
-          ticketListHtml += `</ul>`;
+function renderPendingTable(filterStatus) {
+  currentFilter = filterStatus;
+  const tbody = document.getElementById('table-pending-body');
+  tbody.innerHTML = "";
+  
+  [ 'all', 0 ].forEach(f => {
+    const btn = document.getElementById(`flt-pending-${f}`);
+    if (btn) btn.className = "flex-1 sm:flex-none px-3 py-2 rounded transition border border-gray-600 text-gray-400 hover:bg-gray-700";
+  });
+  
+  if (filterStatus === 'all') document.getElementById('flt-pending-all').className = "flex-1 sm:flex-none px-3 py-2 rounded transition bg-gray-700 text-white font-bold";
+  if (filterStatus === 0) document.getElementById('flt-pending-0').className = "flex-1 sm:flex-none px-3 py-2 rounded transition bg-yellow-500 text-black font-bold";
 
-          // Format Status Badge
-          let statusBadge = "";
-          let actionButtons = "";
-          
-          if (tx.status === 0) {
-            statusBadge = `<span class="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 text-[10px] px-2 py-1 rounded-full uppercase tracking-widest font-bold">Pending</span>`;
-            actionButtons = `
-              <div class="flex flex-col gap-2 w-full max-w-[120px] ml-auto">
-                <button onclick="updatePaymentStatus(${realIndex}, 1)" class="bg-green-600 hover:bg-green-700 text-white text-xs font-bold px-3 py-1.5 rounded shadow transition w-full">Terima</button>
-                <button onclick="updatePaymentStatus(${realIndex}, 3)" class="bg-transparent border border-red-500 hover:bg-red-500 text-red-500 hover:text-white text-xs font-bold px-3 py-1.5 rounded transition w-full">Tolak (Gagal)</button>
-              </div>
-            `;
-          } else if (tx.status === 1 || tx.status === 2) {
-            statusBadge = `<span class="bg-green-500/20 text-green-500 border border-green-500/30 text-[10px] px-2 py-1 rounded-full uppercase tracking-widest font-bold">Lunas / Sukses</span>`;
-            actionButtons = `<span class="text-xs text-gray-500 italic">Telah Diverifikasi</span>`;
-          } else if (tx.status === 3) {
-            statusBadge = `<span class="bg-red-500/20 text-red-500 border border-red-500/30 text-[10px] px-2 py-1 rounded-full uppercase tracking-widest font-bold">Gagal / Batal</span>`;
-            actionButtons = `<span class="text-xs text-gray-500 italic">Ditolak</span>`;
-          }
+  const filteredData = dbTransactions.filter(tx => filterStatus === 'all' ? tx.status === 0 : tx.status === filterStatus);
 
-          const tr = document.createElement('tr');
-          tr.className = "border-b border-gray-800 hover:bg-gray-900/40 transition";
-          tr.innerHTML = `
-            <td class="p-4">
-              <p class="font-oswald text-white tracking-wider text-base">${tx.id}</p>
-              <p class="text-[10px] text-gray-500 mt-1">${tx.datetime}</p>
-            </td>
-            <td class="p-4">
-              <p class="text-white font-bold uppercase text-sm mb-1">${tx.name}</p>
-              <div class="flex items-center gap-3 text-xs">
-                <a href="${waLink}" target="_blank" class="text-green-500 hover:underline flex items-center gap-1">
-                  <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z" /></svg>
-                  ${tx.wa}
-                </a>
-                <a href="${emailLink}" class="text-blue-400 hover:underline flex items-center gap-1">
-                  <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                  Email
-                </a>
-              </div>
-            </td>
-            <td class="p-4">
-              ${ticketListHtml}
-            </td>
-            <td class="p-4">
-              <p class="text-lg font-oswald font-bold text-brandRed">Rp ${tx.total.toLocaleString("id-ID")}</p>
-              <span class="bg-gray-800 text-gray-300 text-[9px] px-2 py-0.5 rounded uppercase tracking-widest mt-1 inline-block">${tx.method}</span>
-            </td>
-            <td class="p-4 text-center">
-              ${statusBadge}
-            </td>
-            <td class="p-4 text-right">
-              ${actionButtons}
-            </td>
-          `;
-          tbody.appendChild(tr);
+  if (filteredData.length === 0) {
+    document.getElementById('empty-pending').classList.remove('hidden');
+  } else {
+    document.getElementById('empty-pending').classList.add('hidden');
+    filteredData.forEach((tx) => {
+      const realIndex = dbTransactions.findIndex(t => t.id === tx.id);
+      
+      // PERBAIKAN: Pengamanan Link WA & Email jika data kosong
+      const waLink = "https://wa.me/" + (tx.wa ? tx.wa.replace(/^0/, '62') : '');
+      const emailLink = "mailto:" + (tx.email || '');
+      
+      let ticketListHtml = '<ul class="list-disc pl-4 space-y-1">';
+      tx.tickets.forEach(t => { ticketListHtml += `<li><span class="font-bold text-white">${t.qty}x</span> <span class="text-gray-300">${t.name}</span></li>`; });
+      ticketListHtml += '</ul>';
+
+      const statusBadge = '<span class="bg-yellow-500/20 text-yellow-500 border border-yellow-500/30 text-[10px] px-2 py-1 rounded-full uppercase tracking-widest font-bold whitespace-nowrap">Pending</span>';
+      
+      const tr = document.createElement('tr');
+      tr.className = "border-b border-gray-800 hover:bg-gray-900/40 transition";
+      tr.innerHTML = `
+        <td class="p-3 sm:p-4"><p class="font-oswald text-white tracking-wider text-xs sm:text-sm whitespace-nowrap">${tx.id}</p><p class="text-[9px] sm:text-[10px] text-gray-500 mt-1 whitespace-nowrap">${tx.datetime}</p></td>
+        <td class="p-3 sm:p-4">
+          <p class="text-white font-bold uppercase text-[11px] sm:text-sm mb-2">${tx.name}</p>
+          <div class="flex flex-col gap-1.5">
+            <a href="${waLink}" target="_blank" class="w-fit bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-500/30 px-2 py-1 rounded flex items-center gap-1.5 text-[9px] sm:text-[10px] transition whitespace-nowrap">
+              <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"></path></svg>
+              ${tx.wa}
+            </a>
+            <a href="${emailLink}" class="w-fit bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/30 px-2 py-1 rounded flex items-center gap-1.5 text-[9px] sm:text-[10px] transition whitespace-nowrap">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+              ${tx.email}
+            </a>
+          </div>
+        </td>
+        <td class="p-3 sm:p-4 text-[10px] sm:text-xs text-gray-300">${ticketListHtml}</td>
+        <td class="p-3 sm:p-4"><p class="text-sm sm:text-base font-oswald font-bold text-brandRed whitespace-nowrap">Rp ${tx.total.toLocaleString("id-ID")}</p><span class="bg-gray-800 text-gray-300 text-[8px] sm:text-[9px] px-2 py-1 rounded uppercase tracking-widest mt-1 inline-block whitespace-nowrap">${tx.method}</span></td>
+        <td class="p-3 sm:p-4 text-center">${statusBadge}</td>
+        <td class="p-3 sm:p-4 text-center"><button onclick="viewBukti('${tx.payment_proof_url}')" class="bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 text-[10px] sm:text-xs font-bold px-3 py-1.5 rounded transition border border-blue-500/30 whitespace-nowrap">Lihat Bukti</button></td>
+        <td class="p-3 sm:p-4 text-right">
+          <div class="flex flex-col gap-2 w-full max-w-[120px] ml-auto">
+            <button onclick="prepareAcceptPayment(${realIndex})" class="bg-green-600 hover:bg-green-500 text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded shadow transition w-full flex items-center justify-center gap-1"><svg class="w-3 h-3 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Terima</button>
+            <button onclick="updatePaymentStatus(${realIndex}, 3)" class="bg-transparent border border-red-500 hover:bg-red-500 text-red-500 hover:text-white text-[10px] sm:text-xs font-bold px-3 py-2 rounded transition w-full">Tolak</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
+function renderRedeemTable() {
+  const tbody = document.getElementById('table-redeem-body');
+  tbody.innerHTML = "";
+  const siapDitukar = dbTransactions.filter(tx => tx.status === 1);
+  document.getElementById('count-siap-ditukar').innerText = `${siapDitukar.length} Tiket`;
+
+  if (siapDitukar.length === 0) {
+    document.getElementById('empty-redeem').classList.remove('hidden');
+  } else {
+    document.getElementById('empty-redeem').classList.add('hidden');
+    siapDitukar.forEach((tx) => {
+      const realIndex = dbTransactions.findIndex(t => t.id === tx.id);
+      let ticketListHtml = '<ul class="list-disc pl-4 space-y-0.5">';
+      tx.tickets.forEach(t => { ticketListHtml += `<li class="text-[10px]"><span class="font-bold text-green-400">${t.qty}x</span> ${t.name}</li>`; });
+      ticketListHtml += '</ul>';
+
+      const tr = document.createElement('tr');
+      tr.className = "border-b border-gray-800 hover:bg-gray-900/40 transition";
+      tr.innerHTML = `
+        <td class="p-3"><p class="font-oswald text-white text-xs whitespace-nowrap">${tx.id}</p></td>
+        <td class="p-3"><p class="text-white font-bold text-[10px] uppercase">${tx.name}</p></td>
+        <td class="p-3 text-gray-300">${ticketListHtml}</td>
+        <td class="p-3 text-brandRed font-oswald text-xs font-bold">Rp ${tx.total.toLocaleString("id-ID")}</td>
+        <td class="p-3 text-center"><span class="bg-brandRed/10 text-brandRed border border-brandRed/20 px-2 py-1 rounded font-oswald font-bold tracking-widest text-[10px] sm:text-xs">${tx.redeemCode}</span></td>
+        <td class="p-3 text-center"><span class="bg-green-500/10 text-green-400 border border-green-500/20 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold whitespace-nowrap">Siap</span></td>
+        <td class="p-3 text-right"><button onclick="redeemFromTable(${realIndex})" class="bg-green-600 hover:bg-green-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow transition w-full whitespace-nowrap">Tukar</button></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
+function renderHistoriTable() {
+  const tbody = document.getElementById('table-histori-body');
+  tbody.innerHTML = "";
+  
+  // Saring hanya transaksi dengan status 2 (Sudah ditukar fisik)
+  const historiData = dbTransactions.filter(tx => tx.status === 2);
+
+  if (historiData.length === 0) {
+    document.getElementById('empty-histori').classList.remove('hidden');
+  } else {
+    document.getElementById('empty-histori').classList.add('hidden');
+    
+    historiData.forEach((tx) => {
+      let ticketListHtml = '<ul class="list-disc pl-4 space-y-0.5">';
+      tx.tickets.forEach(t => { 
+          ticketListHtml += `<li class="text-[10px]"><span class="font-bold text-blue-400">${t.qty}x</span> ${t.name}</li>`; 
+      });
+      ticketListHtml += '</ul>';
+
+      const tr = document.createElement('tr');
+      tr.className = "border-b border-gray-800 hover:bg-gray-900/40 transition";
+      tr.innerHTML = `
+        <td class="p-3 sm:p-4">
+            <p class="font-oswald text-white tracking-wider text-xs sm:text-sm whitespace-nowrap">${tx.id}</p>
+            <p class="text-[9px] sm:text-[10px] text-gray-500 mt-1 whitespace-nowrap">${tx.datetime}</p>
+        </td>
+        <td class="p-3 sm:p-4">
+          <p class="text-white font-bold uppercase text-[11px] sm:text-sm mb-1">${tx.name}</p>
+          <p class="text-[9px] sm:text-[10px] text-gray-500">${tx.wa}</p>
+        </td>
+        <td class="p-3 sm:p-4 text-gray-300">${ticketListHtml}</td>
+        <td class="p-3 sm:p-4 text-center">
+            <span class="bg-gray-800 text-gray-400 border border-gray-700 px-2 py-1 rounded font-oswald font-bold tracking-widest text-[10px] sm:text-xs line-through" title="Code Hangus">${tx.redeemCode}</span>
+        </td>
+        <td class="p-3 sm:p-4 text-center">
+            <span class="bg-blue-500/10 text-blue-400 border border-blue-500/20 text-[9px] px-2 py-0.5 rounded-full uppercase tracking-wider font-bold whitespace-nowrap">SELESAI</span>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
+function viewBukti(url) {
+  if(url && url !== 'null' && url !== 'undefined') {
+    window.open(url, '_blank');
+  } else {
+    showToast('Bukti transfer tidak tersedia/belum diupload', 'error');
+  }
+}
+
+function prepareAcceptPayment(index) {
+  currentPendingIndex = index;
+  const tx = dbTransactions[index];
+  
+  document.getElementById('modal-buyer-name').innerText = tx.name;
+  document.getElementById('modal-buyer-contact').innerText = `${tx.email} | ${tx.wa}`;
+  document.getElementById('modal-tx-id').innerText = tx.id;
+  document.getElementById('modal-redeem-code').innerText = "(Dibuat otomatis oleh sistem)";
+
+  document.getElementById('notification-modal').classList.remove('hidden');
+  document.getElementById('notification-modal').classList.add('flex');
+}
+
+function closeNotificationModal() {
+  document.getElementById('notification-modal').classList.add('hidden');
+  document.getElementById('notification-modal').classList.remove('flex');
+  currentPendingIndex = -1;
+}
+
+function closeSuccessModal() {
+  document.getElementById('success-modal').classList.add('hidden');
+  document.getElementById('success-modal').classList.remove('flex');
+}
+
+// Fungsi Download Barcode Penukaran Tiket (Admin)
+function downloadRedeemBarcode() {
+  const svg = document.getElementById("success-barcode");
+  const redeemCode = document.getElementById("success-code").innerText;
+  
+
+  const svgData = new XMLSerializer().serializeToString(svg);
+  const img = new Image();
+  
+  img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgData)));
+  
+  img.onload = function() {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width + 40; 
+      canvas.height = img.height + 40;
+      const ctx = canvas.getContext("2d");
+      
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 20, 20);
+      
+      // Buat link download otomatis
+      const a = document.createElement("a");
+      a.download = `Kode-Penukaran-${redeemCode}.png`; // Nama filenya otomatis pakai kodeny
+      a.href = canvas.toDataURL("image/png");
+      a.click();
+  };
+}
+
+function searchTicket() {
+  const inputEl = document.getElementById('search-input');
+  const inputId = inputEl.value.trim().toUpperCase();
+  const resArea = document.getElementById('search-result-area');
+  const errArea = document.getElementById('search-error');
+  
+  if (!inputId) { inputEl.focus(); return; }
+  
+  // Mencari berdasarkan ID transaksi ATAU Redeem Code
+  const foundIndex = dbTransactions.findIndex(tx => tx.id === inputId || tx.redeemCode === inputId);
+
+  if (foundIndex !== -1) {
+    const tx = dbTransactions[foundIndex];
+    if (tx.status === 0 || tx.status === 3 || tx.status === 2) {
+      resArea.classList.add('hidden');
+      errArea.className = tx.status === 0 ? "text-center py-4 px-4 rounded-xl mb-4 bg-yellow-900/10 border border-yellow-500/30 text-yellow-500" : "text-center py-4 px-4 rounded-xl mb-4 bg-red-900/10 border border-red-500/30 text-red-500";
+      document.getElementById('err-title').innerText = tx.status === 0 ? "TRANSAKSI PENDING" : (tx.status === 2 ? "TIKET SUDAH DITUKAR!" : "TRANSAKSI GAGAL/DITOLAK");
+      document.getElementById('err-desc').innerText = tx.status === 0 ? "Pembayaran belum lunas." : (tx.status === 2 ? "ID ini telah digunakan." : "Transaksi tidak valid.");
+      errArea.classList.remove('hidden');
+      currentSearchedIndex = -1;
+    } else {
+      currentSearchedIndex = foundIndex;
+      errArea.classList.add('hidden'); 
+      resArea.classList.remove('hidden');
+      document.getElementById('res-id').innerText = tx.id;
+      document.getElementById('res-name').innerText = tx.name;
+      let ulHtml = "";
+      tx.tickets.forEach(t => { ulHtml += `<li class="flex justify-between items-center bg-[#0a0a0a] border border-gray-800 px-3 py-2 rounded-lg"><span class="font-bold text-gray-200 uppercase text-xs">${t.name}</span><span class="bg-green-500 text-white px-2 py-1 rounded text-[10px] font-bold">x${t.qty}</span></li>`; });
+      document.getElementById('res-tickets').innerHTML = ulHtml;
+      try { JsBarcode("#success-barcode", tx.redeemCode, {
+    format: "CODE128", 
+    width: 2, 
+    height: 50, 
+    displayValue: true,
+    background: "#ffffff", // Wajib putih bersih
+    lineColor: "#000000",  // Wajib hitam pekat
+    margin: 10, 
+    fontSize: 14, 
+    font: "Oswald"
+}); } catch(e) {}
+    }
+  } else {
+    resArea.classList.add('hidden');
+    errArea.className = "text-center py-4 px-4 rounded-xl mb-4 bg-red-900/10 border border-red-500/30 text-red-500";
+    document.getElementById('err-title').innerText ="DATA TIDAK DITEMUKAN";
+    document.getElementById('err-desc').innerText = "ID tidak terdaftar di sistem.";
+    errArea.classList.remove('hidden');
+    currentSearchedIndex = -1;
+  }
+  inputEl.focus(); inputEl.select();
+}
+
+function copyRedeemCode() {
+  if (currentSearchedIndex !== -1) {
+    navigator.clipboard.writeText(dbTransactions[currentSearchedIndex].redeemCode).then(() => {
+      showToast('Code berhasil disalin!', 'success');
+    });
+  }
+}
+
+// Fungsi Simulasi
+function simulateScanBarcode() {
+    const lunasTx = dbTransactions.find(tx => tx.status === 1);
+    if (lunasTx) {
+        document.getElementById('search-input').value = lunasTx.redeemCode; 
+        searchTicket();
+    } else {
+        showToast('Tidak ada tiket lunas untuk disimulasi', 'error');
+    }
+}
+
+// Event Listener Enter
+document.getElementById('search-input').addEventListener('keypress', e => { 
+    if (e.key === 'Enter') { 
+        e.preventDefault(); 
+        searchTicket(); 
+    } 
+});
+
+let html5QrCode;
+let isScanning = false;
+
+// Fungsi Menyalakan Kamera (DIKEMBALIKAN KE VERSI FULLSCREEN!)
+function startKameraScanner() {
+    const kameraContainer = document.getElementById('kamera-container');
+    if (isScanning) return;
+    
+    kameraContainer.classList.remove('hidden');
+
+    if (!html5QrCode) {
+        html5QrCode = new Html5Qrcode("reader");
+    }
+    
+    // KONFIGURASI BARU: Dioptimalkan untuk Barcode Panjang (CODE 128)
+    const config = { 
+        fps: 20, // Naikkan FPS agar lebih responsif
+        formatsToSupport: [
+            Html5QrcodeSupportedFormats.CODE_128,
+            Html5QrcodeSupportedFormats.QR_CODE
+        ]
+    };
+
+    html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess)
+    .then(() => {
+        isScanning = true;
+    })
+    .catch((err) => {
+        isScanning = false;
+        kameraContainer.classList.add('hidden');
+        showToast("Kamera tidak diizinkan atau tidak ditemukan!", "error");
+        console.log("Error start kamera:", err);
+    });
+}
+
+// Fungsi Jika Barcode Berhasil Terbaca
+function onScanSuccess(decodedText, decodedResult) {
+    if (!isScanning) return; 
+
+    // 1. Langsung matikan kamera agar tidak dobel scan
+    stopKameraScanner();
+
+    // 2. Bunyikan suara Bip
+    const audio = new Audio('https://www.soundjay.com/buttons/beep-07a.mp3');
+    audio.play().catch(e => console.log("Audio play error:", e));
+
+    // 3. ISI OTOMATIS KOLOM PENCARIAN
+    const searchInput = document.getElementById('search-input');
+    searchInput.value = decodedText; 
+    
+    searchInput.focus(); 
+    searchInput.style.backgroundColor = "#16a34a"; 
+    setTimeout(() => { searchInput.style.backgroundColor = ""; }, 500);
+
+    // 4. Otomatis panggil fungsi cari tiket
+    setTimeout(() => {
+        showToast("Barcode berhasil dipindai!", "success");
+        searchTicket(); 
+    }, 500); 
+}
+
+// Fungsi Mematikan Kamera
+function stopKameraScanner() {
+    if (html5QrCode && isScanning) {
+        html5QrCode.stop().then(() => {
+            isScanning = false;
+            document.getElementById('kamera-container').classList.add('hidden');
+            html5QrCode.clear(); 
+        }).catch((err) => {
+            console.log("Gagal mematikan kamera", err);
+            isScanning = false;
+            document.getElementById('kamera-container').classList.add('hidden');
         });
-      }
+    } else {
+        isScanning = false;
+        document.getElementById('kamera-container').classList.add('hidden');
     }
-
-    function updatePaymentStatus(index, newStatus) {
-      const actionName = newStatus === 1 ? "TERIMA (Sukses)" : "TOLAK (Gagal)";
-      if (confirm(`Anda yakin ingin menandai transaksi ${dbTransactions[index].id} menjadi ${actionName}?`)) {
-        dbTransactions[index].status = newStatus;
-        alert(`Status transaksi berhasil diperbarui.`);
-        renderTable(currentFilter); // Refresh UI table
-        updateSummary(); // Refresh Dashboard numbers
-      }
-    }
-
-    // ==========================================
-    // TAB 3: PENUKARAN TIKET FISIK
-    // ==========================================
-    let currentSearchedIndex = -1;
-
-    function searchTicket() {
-      const inputId = document.getElementById('search-input').value.trim().toUpperCase();
-      const resArea = document.getElementById('search-result-area');
-      const errArea = document.getElementById('search-error');
-
-      if (!inputId) return;
-
-      // Cari tiket yang statusnya 1 (Siap Tukar) atau 2 (Sudah Ditukar)
-      const foundIndex = dbTransactions.findIndex(tx => tx.id === inputId && (tx.status === 1 || tx.status === 2));
-
-      if (foundIndex !== -1) {
-        currentSearchedIndex = foundIndex;
-        const tx = dbTransactions[foundIndex];
-
-        errArea.classList.add('hidden');
-        resArea.classList.remove('hidden');
-
-        // Isi Data Basic
-        document.getElementById('res-id').innerText = tx.id;
-        document.getElementById('res-name').innerText = tx.name;
-
-        // Render List Tiket (Lebih Bagus & Profesional)
-        let ulHtml = "";
-        tx.tickets.forEach(t => {
-          ulHtml += `
-            <li class="flex justify-between items-center bg-gray-900/50 border border-gray-700 p-3 md:p-4 rounded-lg shadow-sm">
-              <div class="flex items-center gap-3 md:gap-4">
-                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-brandRed/20 text-brandRed flex items-center justify-center font-bold">
-                  <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z"></path></svg>
-                </div>
-                <span class="font-bold text-gray-200 uppercase text-xs md:text-sm tracking-wider">${t.name}</span>
-              </div>
-              <span class="bg-brandRed text-white px-3 md:px-4 py-1.5 md:py-2 rounded-md text-[10px] md:text-xs font-bold font-oswald tracking-widest shadow-md">x${t.qty} Lembar</span>
-            </li>`;
-        });
-        document.getElementById('res-tickets').innerHTML = ulHtml;
-
-        // Atur Visual Status & Stempel
-        const badge = document.getElementById('redeem-status-badge');
-        const btn = document.getElementById('btn-redeem');
-        const watermark = document.getElementById('status-watermark');
-        const hint = document.getElementById('redeem-hint');
-
-        if (tx.status === 1) { 
-          // Status Lunas, Belum ditukar fisik
-          badge.className = "inline-block bg-yellow-500/10 text-yellow-500 border border-yellow-500/30 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6 w-full max-w-[200px]";
-          badge.innerText = "Status: Siap Ditukar";
-          
-          btn.classList.remove('hidden');
-          hint.classList.remove('hidden');
-          
-          watermark.innerHTML = `<div class="absolute -right-10 -bottom-10 rotate-[-15deg] border-[6px] border-green-500/20 text-green-500/10 font-oswald text-6xl md:text-7xl font-bold px-6 py-2 uppercase rounded-2xl">LUNAS</div>`;
-
-        } else if (tx.status === 2) { 
-          // Status Sudah ditukar fisik (Expired)
-          badge.className = "inline-block bg-brandRed/10 text-brandRed border border-brandRed/30 px-5 py-2 rounded-full text-xs font-bold uppercase tracking-widest mb-6 w-full max-w-[200px] shadow-[0_0_15px_rgba(201,58,51,0.2)]";
-          badge.innerText = "Status: Telah Ditukar";
-          
-          btn.classList.add('hidden'); // Sembunyikan tombol
-          hint.classList.add('hidden');
-
-          watermark.innerHTML = `
-            <div class="absolute inset-0 flex items-center justify-center bg-brandDarker/60 z-20 backdrop-blur-[2px]">
-              <div class="rotate-[-20deg] border-[6px] border-brandRed text-brandRed font-oswald text-4xl md:text-6xl font-bold px-8 md:px-12 py-4 uppercase rounded-3xl shadow-[0_0_40px_rgba(201,58,51,0.5)] tracking-widest bg-[#0a0a0a]">EXPIRED / DITUKAR</div>
-            </div>`;
-        }
-
-      } else {
-        resArea.classList.add('hidden');
-        errArea.classList.remove('hidden');
-        currentSearchedIndex = -1;
-      }
-    }
-
-    function redeemTicket() {
-      if (currentSearchedIndex !== -1) {
-        if (confirm("Serahkan tiket fisik kepada pembeli. Lanjutkan tandai sebagai 'Telah Ditukar'?")) {
-          dbTransactions[currentSearchedIndex].status = 2; // Ubah status jadi Redeemed
-          alert("Penukaran Berhasil! Tiket fisik telah diserahkan.");
-          searchTicket(); 
-        }
-      }
-    }
-
-    function simulateScanBarcode() {
-      const sampleId = "L4N-2026-QWERT"; // Slamet Raharjo
-      document.getElementById('search-input').value = sampleId;
-      alert(`[SIMULASI ALAT SCAN] Membaca barcode... Terdeteksi ID: ${sampleId}`);
-      searchTicket();
-    }
-
-    // Initialize pertama kali buka admin
-    updateSummary();
-
-  </script>
+}
+</script>
 </body>
 </html>
